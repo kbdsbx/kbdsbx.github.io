@@ -1,0 +1,165 @@
+@import "variable.less";
+@import "main.less";
+
+/**
+ * 简单动画
+ *
+ * @class : 需要添加动画的css属性
+ * @duration : 动画持续时长
+ *      @default : 300ms
+ **/
+.ani ( @class, @duration : .3s )  {
+    ._ani ( @class, @duration );
+}
+
+._ani ( @class, @duration )  {
+    transition+: @class @duration ease-in-out;
+}
+
+/**
+ * 动画延迟
+ *
+ * @delay : 延迟时长
+ **/
+.delay ( @delay ) {
+    ._delay ( @delay, 0s, 0 );
+}
+
+/**
+ * 将一组节点间隔相同时长进行延长
+ *
+ * @base : 基础延长时长
+ * @steps : 每个节点比上一个节点增加的延长时间
+ * @len : 节点数
+ **/
+.delay ( @base, @steps, @len ) {
+    ._delay ( @base, @steps, @len );
+}
+
+._delay ( @base, @steps, @len ) when ( @len > 0 ) {
+    &:nth-child(@{len}) {
+        transition-delay: @base + @steps * @len;
+    }
+    .delay ( @base, @steps, @len - 1 );
+}
+._delay ( @base, @steps, @len ) when ( @len = 0 ) {
+    transition-delay: @base;
+}
+
+.__to ( @dir, @value ) when ( @dir = ltr ) {
+    left: -@value;
+    transition+: left @duration ease-in-out;
+}
+.__to ( @dir, @value ) when ( @dir = rtl ) {
+    right: -@value;
+    transition+: right @duration ease-in-out;
+}
+.__to ( @dir, @value ) when ( @dir = ttb ) {
+    top: -@value;
+    transition+: top @duration ease-in-out;
+}
+.__to ( @dir, @value ) when ( @dir = btt ) {
+    bottom: -@value;
+    transition+: bottom @duration ease-in-out;
+}
+
+/**
+ * 节点缓动显示
+ *
+ * @direction : 方向
+ *      ltr : 从左往右
+ *      rtl : 从右往左
+ *      ttb : 从上往下
+ *      btt : 从下往上
+ * @duration : 持续时间
+ *      @default : 200ms
+ **/
+.fade-out ( @direction; @duration : .2s ) {
+    ._fade-out( @direction; @duration );
+}
+/**
+ * 节点缓动隐藏
+ *
+ * @direction : 方向
+ *      ltr : 从左往右
+ *      rtl : 从右往左
+ *      ttb : 从上往下
+ *      btt : 从下往上
+ * @duration : 持续时间
+ *      @default : 200ms
+ * @length : 缓动距离
+ *      @default : 10px;
+ **/
+.fade-in ( @direction; @duration : .2s; @length : 10px ) {
+    ._fade-in( @direction; @duration; @length );
+}
+
+._fade-out ( @dir; @duration ) {
+    .relative;
+    .opacity;
+    transition+: opacity @duration ease-in-out;
+    .__to ( @dir, 0px );
+}
+._fade-in ( @dir; @duration; @len ) {
+    .relative;
+    .transparency;
+    transition+: opacity @duration ease-in-out;
+    .__to ( @dir, @len );
+}
+
+.ripple ( @color: @gray; @width : 100%; @duration : .5s ) {
+    ._ripple( @color; @width; @duration );
+}
+
+.ripple-hold ( @color: @gray; @width : 100%; @duration : .5s ) {
+    ._ripple( @color; @width; @duration; true );
+}
+
+._ripple ( @color; @width; @duration; @hold : false ) {
+    @keyframes ripple {
+        0% {
+            transform: scale( 0 );
+            .transparency;
+        }
+        20% {
+            transform: scale( 1 );
+            .opacity;
+        }
+        100% {
+            transform: scale( 1 );
+            .transparency;
+        }
+    }
+
+    @keyframes ripple-hold {
+        0% {
+            transform: scale( 0 );
+            .transparency;
+        }
+        100% {
+            transform: scale( 1 );
+            .opacity;
+        }
+    }
+ 
+    .of-hd;
+    .relative;
+    &:after {
+        .absolute;
+        .z-floor;
+        .circle;
+        width: @width;
+        height: @width;
+        left: ~"calc( ( 100% - @{width} ) / 2 )";
+        top: ~"calc( ( 100% - @{width} ) / 2 )";
+        content: "";
+        background-color: @color;
+        & when ( @hold = false ) {
+            animation: ripple @duration;
+        }
+        & when ( @hold = true ) {
+            animation: ripple-hold @duration forwards;
+        }
+    }
+}
+

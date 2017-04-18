@@ -1,0 +1,46 @@
+@import "variable.less";
+
+.make-color ( @color-label, @color, @fade-amount : 100% ) {
+    .@{color-label}, .@{color-label}:hover, .@{color-label}:focus {
+        color: fade( @color, @fade-amount );
+
+        a {
+            color: fade( @color, @fade-amount );
+        }
+    }
+
+    .@{color-label}-bg {
+        background-color: fade( @color, @fade-amount );
+    }
+
+    .@{color-label}-bd {
+        border-color: fade( @color, @fade-amount );
+    }
+
+    .@{color-label}-bd-lt {
+        border-left-color: fade( @color, @fade-amount );
+    }
+    .@{color-label}-bd-rt {
+        border-right-color: fade( @color, @fade-amount );
+    }
+    .@{color-label}-bd-tp {
+        border-top-color: fade( @color, @fade-amount );
+    }
+    .@{color-label}-bd-bt {
+        border-bottom-color: fade( @color, @fade-amount );
+    }
+}
+
+.make-color( highlight, @highlight );
+.make-color( hl, @hl );
+.make-color( hl-half, @hl, 50% );
+.make-color( white , @white );
+.make-color( gray, @gray );
+.make-color( hoary, @hoary );
+.make-color( hoary-half, @hoary, 50% );
+.make-color( black, @black );
+.make-color( trans, @trans, 0% );
+.make-color( red, @red );
+.make-color( green, @green );
+
+
