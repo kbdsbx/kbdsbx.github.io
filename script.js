@@ -12,7 +12,11 @@
     }
 
     $( window ).on( 'resize', _resize );
-    $( window ).on( 'load', _resize );
+    $( window ).on( 'load', function() {
+        _resize();
+
+        $( '.main-section.loading' ).removeClass( 'loading' );
+    } );
 
     if ( window.location.hash ) {
         var _hash = window.location.hash.substr( 1 );
