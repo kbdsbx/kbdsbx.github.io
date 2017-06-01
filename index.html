@@ -4,768 +4,166 @@
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scaleable=0">
-        <title>Dashboard</title>
+        <title>zhaoyi.me</title>
 
-        <link rel="icon" href="favicon.ico" type="image/x-icon" />
         <link rel="stylesheet" data-form="style.less" type="text/css" href="style.css">
 
-        <!-- http://cdn.bootcss.com/less.js/2.7.2/less.js -->
+        <!-- clean up: http://cdn.bootcss.com/less.js/2.7.2/less.js -->
 
-        <script src="./lib/jquery.min.js"></script>
+        <script src="lib/jquery.min.js"></script>
     </head>
     <body>
-        <header>
-            <div class="logo">
-                <h1>ZHAOYI.ME</h1>
+        <div class="main">
+            <div class="nav">
+                <ul>
+                    <li>
+                        <a href="#product"><em>&#9998;</em>作品</a>
+                    </li>
+                    <li>
+                        <a href="#project"><em>&#x265e;</em>项目</a>
+                    </li>
+                    <li>
+                        <a href="#resume"><em>&#x2618;</em>简历</a>
+                    </li>
+                    <li>
+                        <a href="#testboard"><em>&#9762;</em>试验台</a>
+                    </li>
+                </ul>
             </div>
-            <div class="user">
-                <div class="head">
-                    <div class="head-img">
-                        <img src="http://placehold.it/35">
-                        <div class="dropdown">
-                            <ul>
-                                <li><a href="#">状态</a></li>
-                                <li><a href="#">设置</a></li>
-                                <li><a href="#">退出</a></li>
-                            </ul>
+
+            <div class="contents">
+                
+                <div class="main-section">
+                    <h1>Stay Hungry Stay Foolish.</h1>
+                    <h3>—— Golden three fat</h3>
+
+                    <div class="next-box">
+                        <a>Scroll Down ↓</a>
+                    </div>
+                </div>
+
+                <div id="product" class="section product">
+                    <div class="top-img">
+                        <img src="images/0052.png">
+                    </div>
+                    <div class="section-contents">
+                        <h2 class="title"><span>作品集</span></h2>
+                        <div class="product-list">
+                            <a href="https://github.com/kbdsbx/ZGL" target="_blank" class="item">
+                                <img src="images/product/pd-01.jpg">
+                                <div class="description">
+                                    <h4>ZGL <em>C++</em></h4>
+                                    <p>软3D图形库，用于尝试实现3D场景模型，实体模型，光线追踪等。<br>试验之作，已弃坑</p>
+                                </div>
+                            </a>
+                            <a href="https://brush.zhaoyi.me" target="_blank" class="item">
+                                <img src="images/product/pd-02.jpg">
+                                <div class="description">
+                                    <h4>Brush <em>LESS</em></h4>
+                                    <p>一个LESS库，提供了大量的易用性短标签和方法，用于快速搭建可用网站前端界面和UI。<br>本页面均由Brush搭建而成</p>
+                                </div>
+                            </a>
+                            <a href="https://github.com/kbdsbx/zsolution" target="_blank" class="item">
+                                <img src="images/product/pd-03.jpg">
+                                <div class="description">
+                                    <h4>zsolution <em>Node.js</em></h4>
+                                    <p>使用Gulp之前，自行开发的一款前端项目管理工具，以及一些小工具，内嵌自行编写的html解析器。</p>
+                                </div>
+                            </a>
+
+                            <a href="https://github.com/kbdsbx/rolling" target="_blank" class="item">
+                                <img src="images/product/pd-04.jpg">
+                                <div class="description">
+                                    <h4>rolling <em>JS</em></h4>
+                                    <p>HTML幻灯片播放插件，支持触摸屏滑动，滑动暂停；支持多张幻灯片以组操作。</p>
+                                </div>
+                            </a>
+
+                            <a href="https://github.com/kbdsbx/important_verify" target="_blank" class="item">
+                                <img src="images/product/pd-05.jpg">
+                                <div class="description">
+                                    <h4>Important Verify <em>JS</em></h4>
+                                    <p>表单验证插件，用于验证提交表单的内容正确性，甚至提供对“内容必须仅中文”的验证等奇奇怪怪的需求的支持</p>
+                                </div>
+                            </a>
                         </div>
                     </div>
-                    <h5>赵诣</h5>
                 </div>
+                <div id="project" class="section project">
+                    <div class="top-img">
+                        <img src="images/0081.jpg">
+                    </div>
+                    <div class="section-contents">
+                        <h2 class="title"><span>项目经历</span></h2>
+                        <div class="project-list">
+                            <a href="http://www.visualasiaexpo.com/" target="_blank" class="item">
+                                <img src="images/project/pj-01.jpg">
+                                <div class="description">
+                                    <h4>亚洲视觉博览会<em>MAD</em></h4>
+                                    <p>展览型活动网站，为广告，平面设计，视觉艺术博览会。涉及功能：前端开发，内容展示，内容维护，第三方登录</p>
+                                </div>
+                            </a>
+                            <a href="http://www.petkeepa.com/" target="_blank" class="item">
+                                <img src="images/project/pj-02.jpg">
+                                <div class="description">
+                                    <h4>PetKeepa<em>MAD</em></h4>
+                                    <p>C2C网站，用于宠物托管服务。涉及功能：前后端编写，用户角色管理，商户角色管理，第三方登录，MapMash，支付</p>
+                                </div>
+                            </a>
+                            <a href="https://www.smallactions.cn/" target="_blank" class="item">
+                                <img src="images/project/pj-03.jpg">
+                                <div class="description">
+                                    <h4>小行动大不同 <em>PROWISER</em></h4>
+                                    <p>公益网站，用于举办公益活动，联合利华外包项目。涉及功能：前端开发</p>
+                                </div>
+                            </a>
+
+                            <a href="http://foundry.unilever.com.cn/en/" target="_blank" class="item">
+                                <img src="images/project/pj-04.jpg">
+                                <div class="description">
+                                    <h4>Foundry <em>PROWISER</em></h4>
+                                    <p>提供创业支持的展示型网站，联合利华外包项目。涉及功能：前端开发，svg动画编写，插件制作</p>
+                                </div>
+                            </a>
+
+                            <a href="http://www.unileverfoodsolutions.com.cn/" target="_blank" class="item">
+                                <img src="images/project/pj-05.jpg">
+                                <div class="description">
+                                    <h4>联合利华饮食策划 <em>PROWISER</em></h4>
+                                    <p>菜谱网站，联合利华外包项目。涉及功能：前端开发，插件开发</p>
+                                </div>
+                            </a>
+
+                            <a href="http://we.dipont.com/" target="_blank" class="item">
+                                <img src="images/project/pj-06.jpg">
+                                <div class="description">
+                                    <h4>WE留学生 <em>DIPONT</em></h4>
+                                    <p>留学生咨询网站，内容展示型，个人外包项目。涉及功能：前端展示，内容维护</p>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div id="resume" class="section resume">
+                    <div class="top-img">
+                        <img src="images/0068.jpg">
+                    </div>
+                    <div class="section-contents">
+                        <h2 class="title"><span>简历</span></h2>
+                        <div class="downloads">
+                            <a href="data/赵诣——2017年05月31日.docx">简历下载 —— 赵诣 （最后编辑于2017年05月31日）</a>
+                        </div>
+                        <div class="resume-content">
+                        </div>
+                    </div>
+                </div>
+                <div id="testboard" class="section testboard">
+                    ...
+                </div>
+
             </div>
-        </header>
-        <section class="contents">
-            <aside>
-                <div class="search">
-                    <form action="#">
-                        <input type="text" class="text" placeholder="没有用的搜索功能">
-                        <input type="submit" class="submit" value="S">
-                    </form>
-                </div>
-                <nav>
-                    <ul>
-                        <li>
-                            <a href="#summary">Brush简介</a>
-                        </li>
-                        <li>
-                            <a class="focus">Brush手册</a>
-                            <ul>
-                                <li>
-                                    <a href="#colors" class="focus" name="main">颜色</a>
-                                </li>
-                                <li>
-                                    <a href="#base" name="main">基础样式</a>
-                                </li>
-                                <li>
-                                    <a href="#more" name="main">复合样式、组件</a>
-                                </li>
-                                <li>
-                                    <a href="#flex" name="main">Flex盒模型</a>
-                                </li>
-                                <li>
-                                    <a href="#animation" name="main">简单动画</a>
-                                </li>
-                                <li>
-                                    <a href="#algorithm" name="main">算法</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li>
-                            <a href="#principia">Brush原则</a>
-                        </li>
-                        <li>
-                            <a>关于赵诣</a>
-                        </li>
-                        <li>
-                            <a>关于狂奔的扫把星</a>
-                        </li>
-                        <li>
-                            <a>凑一个选项</a>
-                        </li>
-                        <li>
-                            <a>再凑一个</a>
-                        </li>
-                    </ul>
-                </nav>
-                <footer>
-                    <p>© 这里是License或Copyright，比如此页面著作权归赵诣所有是随便写写的 | 备案: XX0000001</p>
-                </footer>
-            </aside>
-            <main name="main">
-                <section>
-                    <h1>Brush</h1>
-                </section>
-                <section id="summary">
-                    <article>
-                        <h3>Brush简介</h3>
-                        <p>一个Less库，提供了大量的易用性短标签和方法，用于快速搭建可用网站前端界面和UI。例如本页面是我用一天时间搭建起来的（呵呵，怎么可能）</p>
-                        <p>出于对简化开发的探索，Brush尝试在Less的基础上，结合CSS3进行大规模的精简、组合。我们不满足于基础样式的样式标签简化，而在通用性装饰和动画上作出进一步探索，尝试将样式代码封装成一个个方法以供调用。就像我们曾经在C语言或其他编译型语言中所做过的事一样。</p>
-                    </article>
-                </section>
-                <section id="colors">
-                    <article>
-                        <h3>颜色</h3>
-                        <p>Brush内建了多种默认颜色，并通过样式标签来设置字体，背景和边框：</p>
-                        <table>
-                            <tr>
-                                <th width="25%">色号</th>
-                                <th width="25%">字色</th>
-                                <th width="25%">背景</th>
-                                <th width="25%">边框</th>
-                            </tr>
-                            <tr>
-                                <td class="hl">#0093FF</td>
-                                <td class="hl">.hl / .highlight</td>
-                                <td class="hl-bg white">.hl-bg / .highlight-bg</td>
-                                <td class="bd hl-bd">.hl-bd / .highlight-bd</td>
-                            </tr>
-                            <tr>
-                                <td class="hl-half">rgba(0, 147, 255, 0.5)</td>
-                                <td class="hl-half">.hl-half</td>
-                                <td class="hl-half-bg white">.hl-half-bg</td>
-                                <td class="bd hl-half-bd">.hl-half-bd</td>
-                            </tr>
-                            <tr>
-                                <td class="gray">#808080</td>
-                                <td class="gray">.gray</td>
-                                <td class="gray-bg white">.gray-bg</td>
-                                <td class="bd gray-bd">.gray-bd</td>
-                            </tr>
-                            <tr>
-                                <td class="hoary">#EFEFEF</td>
-                                <td class="hoary">.hoary</td>
-                                <td class="hoary-bg black">.hoary-bg</td>
-                                <td class="bd hoary-bd">.hoary-bd</td>
-                            </tr>
-                            <tr>
-                                <td class="hoary-half">rgba(239, 239, 239, 0.5)</td>
-                                <td class="hoary-half">.hoary-half</td>
-                                <td class="hoary-half-bg black">.hoary-half-bg</td>
-                                <td class="bd hoary-half-bd">.hoary-half-bd</td>
-                            </tr>
-                            <tr>
-                                <td class="white">#FFFFFF</td>
-                                <td class="white">.white</td>
-                                <td class="white-bg black">.white-bg</td>
-                                <td class="bd white-bd">.white-bd</td>
-                            </tr>
-                            <tr>
-                                <td class="black">#000000</td>
-                                <td class="black">.black</td>
-                                <td class="black-bg white">.black-bg</td>
-                                <td class="bd black-bd">.black-bd</td>
-                            </tr>
-                            <tr>
-                                <td class="trans black">rgba( 0, 0, 0, 0 )</td>
-                                <td class="trans">.trans</td>
-                                <td class="trans-bg black">.trans-bg</td>
-                                <td class="bd trans-bd">.trans-bd</td>
-                            </tr>
-                            <tr>
-                                <td class="red">#FE421D</td>
-                                <td class="red">.red</td>
-                                <td class="red-bg white">.red-bg</td>
-                                <td class="bd red-bd">.red-bd</td>
-                            </tr>
-                            <tr>
-                                <td class="green">#339933</td>
-                                <td class="green">.green</td>
-                                <td class="green-bg white">.green-bg</td>
-                                <td class="bd green-bd">.green-bd</td>
-                            </tr>
-                        </table>
-                        <p><code>.highlight</code>是网站的设计主色调，在使用过程中可以重命名颜色或重新定义颜色。比如使用<code>@font-color : @gray</code>定义文字的基本颜色等。</p>
-                    </article>
-                </section>
-                <section id="base">
-                    <article>
-                        <h3>基础样式</h3>
-                        <p>Display:</p>
-                        <p><i>通过点击按钮熟悉不同样式的区别：</i></p>
-                        <div class="panel long">
-                            <button class="btn-none">.none</button>
-                            <button class="btn-block">.block</button>
-                            <button class="btn-inline">.inline</button>
-                            <button class="btn-inline-block">.inline-block</button>
-                            <button class="btn-table">.table</button>
-                            <br>
-                            <div class="items">
-                                <div class="item">内容</div>
-                                <div class="item">内容</div>
-                                <div class="item">内容</div>
-                                <div class="item">内容</div>
-                                <div class="item">内容</div>
-                            </div>
-                        </div>
-                        <p>Alignment:</p>
-                        <p><i>通过点击按钮熟悉不同样式的区别：</i></p>
-                        <div class="panel short">
-                            <button class="btn-text-left">.text-left</button>
-                            <button class="btn-text-center">.text-center</button>
-                            <button class="btn-text-right">.text-right</button>
-                            <br>
-                            <div class="items">
-                                这是一条文本内容
-                            </div>
-                        </div>
-                        <p>Position:</p>
-                        <p><i>通过点击按钮熟悉不同样式的区别：</i></p>
-                        <div class="panel short position">
-                            <button class="btn-static">.static</button>
-                            <button class="btn-absolute">.absolute</button>
-                            <button class="btn-relative">.relative</button>
-                            <button class="btn-fixed">.fixed</button>
-                            <br>
-                            <div class="items">
-                                <div class="item">内容</div>
-                            </div>
-                        </div>
-                        <p>Position:</p>
-                        <p><i>通过点击按钮熟悉不同样式的区别：</i></p>
-                        <div class="panel position-2">
-                            <button class="btn-left">.absolute.left</button>
-                            <button class="btn-right">.absolute.right</button>
-                            <button class="btn-top">.absolute.top</button>
-                            <button class="btn-bottom">.absolute.bottom</button>
-                            <br>
-                            <div class="items">
-                                <div class="item">内容</div>
-                            </div>
-                        </div>
-                        <p>Padding:</p>
-                        <p>padding是包含在盒子的模型内的（但不包含在contents内），所以当你在结构上应用背景颜色时，padding部分也会使用这个颜色。</p>
-                        <p><i>通过点击按钮熟悉不同样式的区别：<u>其中top可以替换为bottom、left和right</u></i></p>
-                        <div class="panel long padding-box">
-                            <button class="btn-padding-no">.padding-no</button>
-                            <button class="btn-padding-quarter">.padding-quarter</button>
-                            <button class="btn-padding-half">.padding-half</button>
-                            <button class="btn-padding">.padding</button>
-                            <button class="btn-padding-x2">.padding-x2</button>
-                            <button class="btn-padding-x4">.padding-x4</button>
-                            <button class="btn-padding-x8">.padding-x8</button>
-                            <button class="btn-padding-x16">.padding-x16</button>
-                            <br>
-                            <button class="btn-padding-top-no">.padding-top-no</button>
-                            <button class="btn-padding-top-quarter">.padding-top-quarter</button>
-                            <button class="btn-padding-top-half">.padding-top-half</button>
-                            <button class="btn-padding-top">.padding-top</button>
-                            <button class="btn-padding-top-x2">.padding-top-x2</button>
-                            <button class="btn-padding-top-x4">.padding-top-x4</button>
-                            <button class="btn-padding-top-x8">.padding-top-x8</button>
-                            <button class="btn-padding-top-x16">.padding-top-x16</button>
-                            <br>
-                            <div class="items">
-                                <div class="item">内容</div>
-                            </div>
-                        </div>
-                        <p>Margin:</p>
-                        <p><i>通过点击按钮熟悉不同样式的区别：<u>其中top可以替换为bottom、left和right</u></i></p>
-                        <div class="panel long padding-box">
-                            <button class="btn-margin-no">.margin-no</button>
-                            <button class="btn-margin-quarter">.margin-quarter</button>
-                            <button class="btn-margin-half">.margin-half</button>
-                            <button class="btn-margin">.margin</button>
-                            <button class="btn-margin-x2">.margin-x2</button>
-                            <button class="btn-margin-x4">.margin-x4</button>
-                            <button class="btn-margin-x8">.margin-x8</button>
-                            <button class="btn-margin-x16">.margin-x16</button>
-                            <br>
-                            <button class="btn-margin-top-no">.margin-top-no</button>
-                            <button class="btn-margin-top-quarter">.margin-top-quarter</button>
-                            <button class="btn-margin-top-half">.margin-top-half</button>
-                            <button class="btn-margin-top">.margin-top</button>
-                            <button class="btn-margin-top-x2">.margin-top-x2</button>
-                            <button class="btn-margin-top-x4">.margin-top-x4</button>
-                            <button class="btn-margin-top-x8">.margin-top-x8</button>
-                            <button class="btn-margin-top-x16">.margin-top-x16</button>
-                            <br>
-                            <div class="items">
-                                <div class="item">内容</div>
-                            </div>
-                        </div>
-                        <p>Border:</p>
-                        <p><i>通过点击按钮熟悉不同样式的区别：<u>其中top可以替换为bottom、left和right</u></i></p>
-                        <div class="panel middle border-box">
-                            <button class="btn-border-no">.border-no</button>
-                            <button class="btn-border">.border</button>
-                            <button class="btn-border-x2">.border-x2</button>
-                            <button class="btn-border-x4">.border-x4</button>
-                            <button class="btn-border-x8">.border-x8</button>
-                            <button class="btn-border-x16">.border-x16</button>
-                            <br>
-                            <button class="btn-border-top-no">.border-top-no</button>
-                            <button class="btn-border-top">.border-top</button>
-                            <button class="btn-border-top-x2">.border-top-x2</button>
-                            <button class="btn-border-top-x4">.border-top-x4</button>
-                            <button class="btn-border-top-x8">.border-top-x8</button>
-                            <button class="btn-border-top-x16">.border-top-x16</button>
-                            <br>
-                            <div class="items">
-                                <div class="item">内容</div>
-                            </div>
-                        </div>
-                        <p>Outline:</p>
-                        <p><i>通过点击按钮熟悉不同样式的区别：<s>其中top可以替换为bottom、left和right</s>&nbsp;<u>outline没有outline-top、outline-bottom、outline-left和outline-right</u></i></p>
-                        <div class="panel middle border-box">
-                            <button class="btn-outline-no">.outline-no</button>
-                            <button class="btn-outline">.outline</button>
-                            <button class="btn-outline-x2">.outline-x2</button>
-                            <button class="btn-outline-x4">.outline-x4</button>
-                            <button class="btn-outline-x8">.outline-x8</button>
-                            <button class="btn-outline-x16">.outline-x16</button>
-                            <br>
-                            <div class="items">
-                                <div class="item">内容</div>
-                            </div>
-                        </div>
-                        <p>Border Type:</p>
-                        <p><i>通过点击按钮熟悉不同样式的区别：</i></p>
-                        <div class="panel middle border-box">
-                            <button class="btn-solid">.solid</button>
-                            <button class="btn-dotted">.dotted</button>
-                            <button class="btn-dashed">.dashed</button>
-                            <button class="btn-double">.double</button>
-                            <br>
-                            <div class="items">
-                                <div class="item">内容</div>
-                            </div>
-                        </div>
-                        <p>Border radius:</p>
-                        <p><i>通过点击按钮熟悉不同样式的区别：</i></p>
-                        <div class="panel middle">
-                            <button class="btn-radius-no">.radius-no</button>
-                            <button class="btn-radius">.radius</button>
-                            <button class="btn-circle">.circle</button>
-                            <br>
-                            <div class="items">
-                                <div class="item">内容</div>
-                            </div>
-                        </div>
-                        <p>Width:</p>
-                        <p><i>通过点击按钮熟悉不同样式的区别：</i></p>
-                        <div class="panel middle">
-                            <button class="btn-auto">.auto</button>
-                            <button class="btn-full">.full</button>
-                            <button class="btn-half">.half</button>
-                            <button class="btn-third">.third</button>
-                            <button class="btn-quarter">.quarter</button>
-                            <button class="btn-empty">.empty</button>
-                            <br>
-                            <div class="items">
-                                <div class="item">内容</div>
-                            </div>
-                        </div>
-                        <p>Text decoration:</p>
-                        <p><i>通过点击按钮熟悉不同样式的区别：</i></p>
-                        <div class="panel middle">
-                            <button class="btn-udl">.udl</button>
-                            <button class="btn-orl">.orl</button>
-                            <button class="btn-thl">.thl</button>
-                            <button class="btn-nl">.nl</button>
-                            <br>
-                            <div class="items">
-                                这是一条文本内容
-                            </div>
-                        </div>
-                        <p>Font weight:</p>
-                        <p><i>通过点击按钮熟悉不同样式的区别：</i></p>
-                        <div class="panel middle">
-                            <button class="btn-lighter">.lighter</button>
-                            <button class="btn-normal">.normal</button>
-                            <button class="btn-bold">.bold</button>
-                            <br>
-                            <div class="items">
-                                这是一条文本内容
-                            </div>
-                        </div>
-                        <p>Font size:</p>
-                        <p><i>通过点击按钮熟悉不同样式的区别：</i></p>
-                        <div class="panel middle">
-                            <button class="btn-font-8">.font-8</button>
-                            <button class="btn-font-10">.font-10</button>
-                            <button class="btn-font-12">.font-12</button>
-                            <button class="btn-font-14">.font-14</button>
-                            <button class="btn-font-16">.font-16</button>
-                            <button class="btn-font-18">.font-18</button>
-                            <button class="btn-font-20">.font-20</button>
-                            <button class="btn-font-22">.font-22</button>
-                            <button class="btn-font-24">.font-24</button>
-                            <button class="btn-font-26">.font-26</button>
-                            <button class="btn-font-28">.font-28</button>
-                            <button class="btn-font-30">.font-30</button>
-                            <button class="btn-font-32">.font-32</button>
-                            <button class="btn-font-34">.font-34</button>
-                            <button class="btn-font-36">.font-36</button>
-                            <button class="btn-font-38">.font-38</button>
-                            <button class="btn-font-40">.font-40</button>
-                            <button class="btn-font-42">.font-42</button>
-                            <button class="btn-font-44">.font-44</button>
-                            <button class="btn-font-46">.font-46</button>
-                            <button class="btn-font-48">.font-48</button>
-                            <button class="btn-font-50">.font-50</button>
-                            <br>
-                            <div class="items">
-                                这是一条文本内容
-                            </div>
-                        </div>
-
-                        <p>Opacity:</p>
-                        <p><i>通过点击按钮熟悉不同样式的区别：</i></p>
-                        <div class="panel middle">
-                            <button class="btn-opacity">.opacity</button>
-                            <button class="btn-transparency">.transparency</button>
-                            <br>
-                            <div class="items">
-                                <div class="item">内容</div>
-                            </div>
-                        </div>
-                        <br>
-                        <p>更多样式详见ReadMe</p>
-                    </article>
-                </section>
-                <section id="more">
-                    <article>
-                        <h3>复合样式、组件</h3>
-                        <p>复合样式、组件会将基础样式组合起来成为一个可以通用的组件，自由添加在需要的节点上。同样为了保证定制化，我们将其做成方法以供调用，而且大部分组件会提供一个或几个默认样式用于快速添加。由于复合样式、组件是由多个基本样式组成，其样式难免会被既有样式覆盖，导致样式错误，故而请谨慎使用；避免此问题的最佳途径就是页面结构部件化（Componentization），降低样式耦合性。</p>
-                        <p>为保证样式与结构分离，我们会尽最大努力不去添加任何可能的多余文档标签，例如装饰用的<code>&lt;em&gt;</code>或者<code>&lt;span&gt;</code>，而是使用被装饰的标签自带的伪类例如<code>:before</code>和<code>:after</code>。</p>
-                        <br>
-                        <p>装饰角：</p>
-                        <p>注意：实心装饰角需要占用元素的<code>:before</code>伪类，而带边框的装饰角需要占用<code>:before</code>和<code>:after</code>两个伪类，若需要在其他地方使用伪类，可以尝试嵌套一个新的结构进行装饰。</p>
-                        <p><i>通过点击按钮熟悉不同样式的区别：</i></p>
-                        <div class="panel middle">
-                            <button class="long btn-arrow-full-left">.relative.arrow-full( 16px, left, @hl )</button>
-                            <button class="long btn-arrow-full-right">.relative.arrow-full( 16px, right, @hl )</button>
-                            <button class="long btn-arrow-full-top">.relative.arrow-full( 16px, top, @hl )</button>
-                            <button class="long btn-arrow-full-bottom">.relative.arrow-full( 16px, bottom, @hl )</button>
-                            <br>
-                            <div class="items">
-                                <div class="item">内容</div>
-                            </div>
-                        </div>
-                        <p><i>通过点击按钮熟悉不同样式的区别：</i></p>
-                        <div class="panel middle border-x2-box">
-                            <button class="long btn-arrow-left">.relative.arrow( 16px, left, @gray, @hl, 1px )</button>
-                            <button class="long btn-arrow-right">.relative.arrow( 16px, right, @gray, @hl, 1px )</button>
-                            <button class="long btn-arrow-top">.relative.arrow( 16px, top, @gray, @hl, 1px )</button>
-                            <button class="long btn-arrow-bottom">.relative.arrow( 16px, bottom, @gray, @hl, 1px )</button>
-                            <br>
-                            <div class="items">
-                                <div class="item">内容</div>
-                            </div>
-                        </div>
-                        <p>Brush提供默认的样式<code>.arrow</code>以及<code>.arrow-full</code>，用于灰色边框白色背景的边框装饰角和纯白色背景的无边框装饰角。当然大部分情况下使用者需要自定义参数，故建议使用带参数的方法进行添加。</p>
-                        <p>默认情况下Brush的装饰角会沿边居中，若你需要调整其在边框的位置，需要在调用方法后自行添加样式覆盖，例如：<code>top: 10%</code>。</p>
-                        <br>
-                        <p>装饰线：</p>
-                        <p>注意：装饰线需要占用元素的<code>:before</code>和/或<code>:after</code>伪类，若需要在其他地方使用伪类，可以尝试嵌套一个新的结构进行装饰。</p>
-                        <p><i>通过点击按钮熟悉不同样式的区别：</i></p>
-                        <div class="panel p-box">
-                            <button class="btn-line">.line( 9 )</button>
-                            <button class="btn-line-left">.line-left( 9 )</button>
-                            <button class="btn-line-right">.line-right( 9 )</button>
-                            <button class="btn-line-2">.line( 9, 16px, @hl )</button>
-                            <br>
-                            <div class="items">
-                                <h4 class="item">这里是一条文本标题</h4>
-                            </div>
-                        </div>
-
-                        <p>Flex装饰线：</p>
-                        <p>Flex装饰线会使用<code>display: flex</code>覆盖节点原本的显示方式，即便这样我们还是推荐使用Flex装饰线。与普通装饰线不同的是，<b>Flex装饰线不需要指定标题的文字数量，而是通过盒模型自适应装饰线宽度</b>，当然此样式需要目标浏览器对Flex盒模型的几乎完全的支持。</p>
-                        <p>注意：装饰线需要占用元素的<code>:before</code>和<code>:after</code>伪类，若需要在其他地方使用伪类，可以尝试嵌套一个新的结构进行装饰。</p>
-                        <p><i>通过点击按钮熟悉不同样式的区别：</i></p>
-                        <div class="panel p-box">
-                            <button class="btn-flex-line">.flex-line()</button>
-                            <button class="btn-flex-line-left">.flex-line-left()</button>
-                            <button class="btn-flex-line-right">.flex-line-right()</button>
-                            <button class="btn-flex-line-2">.flex-line( 16px, @hl )</button>
-                            <br>
-                            <div class="items">
-                                <h4 class="item">这里是一条文本标题</h4>
-                            </div>
-                        </div>
-                        
-                        <p>灯光阴影：</p>
-                        <p>注意：灯光阴影需要占用元素的<code>:after</code>伪类，若需要在其他地方使用伪类，可以尝试嵌套一个新的结构进行装饰。</p>
-                        <p><i>通过点击按钮熟悉不同样式的区别：</i></p>
-                        <div class="panel middle">
-                            <button class="btn-shadow">.shadow()</button>
-                            <button class="middle btn-shadow-3">.shadow( 50%, 3px, 8px, @hl )</button>
-                            <button class="middle btn-shadow-2">.shadow( 100%, 3px, 8px, @hl )</button>
-                            <button class="middle btn-shadow-4">.shadow( 150%, 3px, 8px, @hl )</button>
-                            <br>
-                            <div class="items">
-                                <div class="item">内容</div>
-                            </div>
-                        </div>
-                         
-                        <p>已选装饰：</p>
-                        <p>与边框搭配食用更加哦~</p>
-                        <p>注意：灯光阴影需要占用元素的<code>:before</code>和<code>:after</code>伪类，若需要在其他地方使用伪类，可以尝试嵌套一个新的结构进行装饰。</p>
-                        <p><i>通过点击按钮熟悉不同样式的区别：</i></p>
-                        <div class="panel middle choose-box">
-                            <button class="btn-choose-badge">.choose-badge()</button>
-                            <button class="btn-choose-badge-2">.choose-badge( tl )</button>
-                            <button class="btn-choose-badge-3">.choose-badge( br )</button>
-                            <button class="btn-choose-badge-4">.choose-badge( bl )</button>
-                            <button class="middle btn-choose-badge-7">.bd.hl-bd.choose-badge()</button>
-                            <button class="middle btn-choose-badge-5">.choose-badge( tr, 40px, @white, @red )</button>
-                            <button class="long btn-choose-badge-6">.choose-badge( tr, 40px, @white, @red, "\266B" )</button>
-                            <button class="long btn-choose-badge-8">.choose-badge( tr, 40px, @trans, @red, "\266B" )</button>
-                            <br>
-                            <div class="items">
-                                <div class="item">内容</div>
-                            </div>
-                        </div>
-
-                        <p>文字阴影（3D文字）：</p>
-                        <p><i>通过点击按钮熟悉不同样式的区别：</i></p>
-                        <div class="panel middle text-shadow-box">
-                            <button class="btn-text-shadow">.text-shadow()</button>
-                            <button class="long btn-text-shadow-2">.text-shadow( 15px, 45grad, @hl, fade( @hl, 50% ) )</button>
-                            <button class="middle btn-text-shadow-3">.text-shadow( 15px, 90deg, @red, @green )</button>
-                            <button class="long btn-text-shadow-4">.text-shadow( 15px, 135deg, @gray, @trans )</button>
-                            <br>
-                            <div class="items">
-                                <div class="item">内容</div>
-                            </div>
-                        </div>
-                        <p>我们将一直完善复合样式及组件，将大量需要重复工作但极其通用的组件抽象出来组成方法集成在Brush中。</p>
-                    </article>
-                </section>
-                <section id="flex">
-                    <article>
-                        <h3>使用Flex布局</h3>
-                        <p>我们十分推荐使用Flex盒模型进行布局，Flex经过几次大的修改，曾命名为box，flex-box，直到现在Chrome以及FireFox还支持以<code>display: box;</code>为基础的盒模型。</p>
-                        <p>盒模型很好的解决了块状组件在容器中的布局问题，尤其是另过去前端开发工作者们备受困扰的上下居中，甚至通过<code>justicy-content: space-between</code>创建了相等间隔的排布，这让我想起了Bootstrap开发者不得不引入<code>row { margin-left: -15px; margin-right: -15px; }</code>才解决此问题（但不得不说当时的解决方法即时在现在看来也很巧妙）。</p>
-                        <p><i>通过点击按钮熟悉不同样式的区别：</i></p>
-                        <div class="panel flex-box">
-                            <button class="btn-flex-space">.flex.space-between</button>
-                            <button class="btn-flex-center">.flex.center</button>
-                            <button class="btn-flex-start">.flex.start</button>
-                            <button class="btn-flex-end">.flex.end</button>
-                            <button class="btn-flex-align-center">.flex.align-center</button>
-                            <button class="btn-flex-align-start">.flex.align-start</button>
-                            <button class="btn-flex-align-end">.flex.align-end</button>
-                            <button class="btn-flex-align-stretch">.flex.align-stretch</button>
-                            <button class="btn-flex-wrap">.flex.wrap</button>
-                            <button class="btn-flex-column">.flex.column</button>
-                            <br>
-                            <div class="items">
-                                <div class="item">内容</div>
-                                <div class="item">内容</div>
-                                <div class="item">内容</div>
-                                <div class="item">内容</div>
-                                <div class="item">内容</div>
-                                <div class="item">内容</div>
-                                <div class="item">内容</div>
-                            </div>
-                        </div>
-                    </article>
-                </section>
-                <section id="animation">
-                    <article>
-                        <h3>简单动画</h3>
-                        <p>自从CSS3支持缓动函数以来，动态效果的制作变得越来越快速，也越来越强大。Brush也在其基础上添加了一些简单的支持函数，用于使用者快速添加动画而避免无谓的细节。</p>
-                        <p>Animation and delay:</p>
-                        <p><code>ani()</code>方法使用的是Less中的<code>merge</code>特性，多个动画效果会在编译时集成而不用担心被覆盖，故而可以使用<code>.ani( width ); .ani( height ); .ani( opacity )</code>，在编译时会正确编译为<code>transition: width .3s ease-in-out, height .3s ease-in-out, opacity .3s ease-in-out;</code>。</p>
-                        <p><i>通过点击按钮熟悉不同样式的区别：</i></p>
-                        <div class="panel">
-                            <button class="btn-ani-width">.ani( width )</button>
-                            <button class="middle btn-ani-delay-width">.ani( width ).delay( 1s )</button>
-                            <button class="middle btn-ani-delay-width-2">.ani( width ).delay( 0s, .2s, 4 )</button>
-                            <br>
-                            <div class="items">
-                                <div class="item">内容</div>
-                                <div class="item">内容</div>
-                                <div class="item">内容</div>
-                                <div class="item">内容</div>
-                            </div>
-                        </div>
-                        <p>Fade in/out:</p>
-                        <p>动画效果几乎都是单一且独立的，故而可以通过多次调用并赋予不同的参数来进行组合效果，例如本例中的动画3、4和5。</p>
-                        <p><i>通过点击按钮熟悉不同样式的区别：</i></p>
-                        <div class="panel fade-box">
-                            <button class="btn-fade-in">.fade-in( ltr )</button>
-                            <button class="btn-fade-out">.fade-out( ltr )</button>
-                            <button class="middle btn-fade-in-2">.fade-in( ltr ).fade-in( ttb )</button>
-                            <button class="middle btn-fade-out-2">.fade-out( ltr ).fade-out( ttb )</button>
-                            <button class="middle btn-fade-in-3">.fade-in( ltr ).fade-in( ttb ).delay( 0s, .2s, 4 )</button>
-                            <br>
-                            <div class="items">
-                                <div class="item">内容</div>
-                                <div class="item">内容</div>
-                                <div class="item">内容</div>
-                                <div class="item">内容</div>
-                            </div>
-                        </div>
-                        <p>涟漪：</p>
-                        <p>注意：涟漪需要占用元素的<code>:after</code>伪类，若需要在其他地方使用伪类，可以尝试嵌套一个新的结构进行装饰。</p>
-                        <p><i>通过点击按钮熟悉不同样式的区别：</i></p>
-                        <div class="panel middle ripple-box">
-                            <button class="btn-ripple">.ripple()</button>
-                            <button class="btn-ripple-2">.ripple( @hl )</button>
-                            <button class="middle btn-ripple-3">.ripple( @hl, 100px, 1s )</button>
-                            <br>
-                            <button class="btn-ripple-4">.ripple-hold()</button>
-                            <button class="btn-ripple-5">.ripple-hold( @hl )</button>
-                            <button class="middle btn-ripple-6">.ripple-hold( @hl, 100px, 1s )</button>
-                            <br>
-                            <div class="items">
-                                <div class="item">内容</div>
-                            </div>
-                        </div>
-                        <p>由于本页面不使用js，会导致按钮取消<code>:focus</code>时直接清除伪类样式而不渐变，若想要产生较为好的渐变效果请在js中使用类似如下代码:</p>
-                        <pre class="long">
-$( 'button' ).blur(
-    var _this = this;
-    // fade in
-    _this.addClass( 'transparency' );
-    // remove ripple class after some time.
-    setTimeout( function() {
-        _this.removeClass( 'my-ripple' );
-    }, 300 );
-} );</pre>
-                    </article>
-                </section>
-                <section id="algorithm">
-                    <article>
-                        <h3>算法</h3>
-                        <p>尝试使用less进行算法添加</p>
-                        <h5>Cubic Bezier （三次方贝塞尔曲线）</h5>
-                        <p>在使用三次方贝塞尔曲线时，需要在调用方法的时候添加关键帧，例如<code>.cubic-bezier( x1, y1, x2, y2, <b>50</b> )</code>或者<code>.linear( <b>50</b> )</code>，关键帧范围为[1, 100]，而其调用结果主要使用函数调用后的less返回值<code>@vx</code>和<code>@vy</code>。其中，<code><b>@vy</b></code>值是用于加入插值，或渐变的主要值。</p>
-                        <div class="panel long bezier-box">
-                            <button class="long btn-bezier">.cubic-bezier( 0, 0.5, 0.5, 1 )</button>
-                            <button class="long btn-bezier-2">.cubic-bezier( 0.6, 0, 0.4, 1 )</button>
-                            <button class="long btn-bezier-3">.cubic-bezier( 0, 0, 1, 1 ) / .linear()</button>
-                            <button class="long btn-bezier-4">.cubic-bezier( .25, .1, .25, 1 ) / .ease()</button>
-                            <button class="long btn-bezier-5">.cubic-bezier( .42, 0, 1, 1 ) / .ease-in()</button>
-                            <button class="long btn-bezier-6">.cubic-bezier( 0, 0, .58, 1 ) / .ease-out()</button>
-                            <button class="long btn-bezier-7">.cubic-bezier( .42, 0, .58, 1 ) / .ease-in-out()</button>
-                            <button class="long btn-bezier-8">.cubic-bezier( 0.68, -0.55, 0.27, 1.55 )</button>
-                            <br>
-                            <div class="items">
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                                <div class="item"></div>
-                            </div>
-                        </div>
-                    </article>
-                </section>
-                <section id="principia">
-                    <article>
-                        <h3>Brush原则</h3>
-                        <h5>秉持微小原则</h5>
-                        <p>保持任何可用标签、方法的简单，易用。为绝大部分方法提供默认参数，使其可以当成一个标签来使用。几乎所有标签都可以自由组合，当然部分互斥的样式标签会遵循CSS层叠原则，也就是前者被后者覆盖；而占用<code>:before</code>和/或<code>:after</code>的样式和方法十分建议单独使用。</p>
-                        <h5>谨慎添加</h5>
-                        <p>我们相信每个使用者和他背后的设计师都极具创造力，故而我们仅提供最基础，最简单的样式以及动画，以供自由组合。</p>
-                        <p>当Brush的使用者希望添加一个导航栏时，Brush并不会提供一个<code>.nav( ... )</code>来供其调用（当然未来某个UI库可能会如此），而是在自己的项目中自行添加一个<code>.nav { ... }</code>来进行编写和细化，一个固定的方法调用可能会省却很多时间，但是却极大遏制了设计的完整性。</p>
-                        <p>比如本页面左边导航栏下方的装饰线，只需要寥寥几行代码即可添加完成，甚至打包作为一个控件的通用部分，可Brush中并没有添加它（将来可能会添加一个相似但更通用的装饰线），对添加任何样式和动画保持谨慎，是Brush 的原则之一。</p>
-                        <h5>通用原则</h5>
-                        <p>我们希望添加的内容具有极大的通用性，故而在添加的过程中Brush方法会暴露大量的参数结构，甚至将某些可能需要js参与的样式剔除出Brush，毕竟在运行时添加less代码并不那么容易。</p>
-                        <p>例如，<code>.arrow()</code>三角装饰不仅可以用在下拉菜单和提示框的上面，而且可以放置在类微信对话框中，人物对话框和头像之间；而<code>.shadow()</code>阴影更是可以放在几乎任何节点的下面作为装饰</p>
-                        <h5>小白勿近原则</h5>
-                        <p>了解层叠，了解flex，了解动画，了解一些css的深坑是小白应该做的事情，而Brush会屏蔽所有细节，以至于当出现问题时无法正确排除导致连锁反应。当然这里说的有些绝对，本意是指在使用Brush之前，你需要一些基础知识作为支持。</p>
-                    </article>
-                </section>
-            </main>
-        </section>
+        </div>
+    
+        <script src="script.js"></script>
     </body>
 </html>

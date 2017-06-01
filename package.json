@@ -1,0 +1,30 @@
+{
+  "name": "kbdsbx.github.io",
+  "version": "1.0.0",
+  "description": "kbdsbx.github.io\r ================",
+  "main": "gulpfile.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "dependencies": {
+    "gulp-clean": "^0.3.2",
+    "gulp-csso": "^3.0.0",
+    "gulp": "^3.9.1",
+    "gulp-html-replace": "^1.6.2",
+    "gulp-less": "^3.3.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kbdsbx/kbdsbx.github.io.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kbdsbx/kbdsbx.github.io/issues"
+  },
+  "homepage": "https://github.com/kbdsbx/kbdsbx.github.io#readme"
+}
