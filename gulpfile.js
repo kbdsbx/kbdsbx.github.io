@@ -28,6 +28,9 @@ gulp.task( 'default', [ 'clean', 'lib' ], function() {
     gulp.src( 'src/data/**/*' )
         .pipe( gulp.dest( 'data/' ) );
 
+    gulp.src( 'src/tests/**/*' )
+        .pipe( gulp.dest( 'tests/' ) );
+
     gulp.src( 'src/*.html' )
         .pipe( htmlreplace( {
             js : {

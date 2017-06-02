@@ -143,15 +143,16 @@ require( [ "jquery", "consoles" ], function( _jquery, _consoles ) {
     } );
 
     $( '#test-1' ).on( 'load', function() {
-        consoles.log( 'Test-1 初始化' );
+        consoles.log( 'test 01 [抹除图片] init...' );
 
         require( [ './tests/spume/spume.js' ], function() {
-            consoles.log( 'spume loaded' );
+            consoles.log( 'spume.js loaded' );
+            consoles.log( '请在左侧白框区域内涂抹' );
         } )
     } );
 
     $( '#test-1' ).on( 'show', function() {
-        consoles.log( 'Test-1 显示' );
+        consoles.log( 'test 01 shown.' );
     } );
 
 } );

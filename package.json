@@ -7,9 +7,9 @@
     "lib": "lib"
   },
   "dependencies": {
+    "gulp": "^3.9.1",
     "gulp-clean": "^0.3.2",
     "gulp-csso": "^3.0.0",
-    "gulp": "^3.9.1",
     "gulp-html-replace": "^1.6.2",
     "gulp-less": "^3.3.0"
   },
