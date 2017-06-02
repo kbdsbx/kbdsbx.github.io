@@ -13,13 +13,20 @@ gulp.task( 'clean', function() {
         .pipe( clean() );
 } );
 
-gulp.task( 'default', [ 'clean' ], function() {
-    gulp.src( 'src/lib/*' )
-        .pipe( gulp.dest( 'lib' ) );
+gulp.task( 'lib', function() {
+    gulp.src( 'node_modules/requirejs/require.js' )
+        .pipe( gulp.dest( 'src/lib/require/' ) );
+    gulp.src( 'node_modules/jQuery/tmp/jquery.js' )
+        .pipe( gulp.dest( 'src/lib/jquery/' ) );
+} );
+
+gulp.task( 'default', [ 'clean', 'lib' ], function() {
+    gulp.src( 'src/lib/**/*' )
+        .pipe( gulp.dest( 'lib/' ) );
     gulp.src( 'src/images/**/*' )
-        .pipe( gulp.dest( 'images' ) );
+        .pipe( gulp.dest( 'images/' ) );
     gulp.src( 'src/data/**/*' )
-        .pipe( gulp.dest( 'data' ) );
+        .pipe( gulp.dest( 'data/' ) );
 
     gulp.src( 'src/*.html' )
         .pipe( htmlreplace( {

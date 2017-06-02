@@ -30,11 +30,10 @@ body {
         .left;
         .full;
         .z-low;
+        .of-hd;
         height: 50px;
         bottom: -50px;
 
-        .flex;
-        .center;
         .hl-half-bg;
         .white;
         .ani( bottom );
@@ -60,17 +59,35 @@ body {
             .bottom;
         }
 
+        .nav-content {
+            .ani( transform );
+
+            &.nav-main {
+                transform: translateY( 0px );
+                &.hide {
+                    transform: translateY( -50px );
+                }
+            }
+
+            &.nav-sub {
+                transform: translateY( -50px );
+                &.hide {
+                    transform: translateY( 0px );
+                }
+            }
+        }
+
         ul {
             width: 960px;
             .h-full;
-            .flex;
-            .start;
-            .align-center;
+            .of-hd;
+            .block-center;
 
             li {
                 height: 50px;
                 .white;
                 .font-20;
+                .pull-left;
                 .flex;
                 .align-center;
                 .center;
@@ -226,10 +243,27 @@ body {
                     }
                 }
             }
+        
+            .panel {
+                .full;
+                .h-full;
+                .absolute;
+                .top;
+                .left;
+                .transparency;
+                .ani( opacity );
+                .events-none;
+                .flex;
+                .center;
+                .align-center;
+
+                &.show {
+                    .opacity;
+                    .events-all;
+                }
+            }
         }
 
-        .product {
-        }
         .project-list,
         .product-list {
             .flex;
@@ -302,3 +336,6 @@ body {
         }
     }
 }
+
+
+@import "lib/consoles/consoles.less";

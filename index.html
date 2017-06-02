@@ -10,25 +10,43 @@
 
         <!-- clean up: http://cdn.bootcss.com/less.js/2.7.2/less.js -->
 
-        <script src="lib/jquery.min.js"></script>
+        <script src="lib/require/require.js"></script>
     </head>
     <body>
         <div class="main">
             <div class="nav">
-                <ul>
-                    <li>
-                        <a href="#product"><em>&#9998;</em>作品</a>
-                    </li>
-                    <li>
-                        <a href="#project"><em>&#x265e;</em>项目</a>
-                    </li>
-                    <li>
-                        <a href="#resume"><em>&#x2618;</em>简历</a>
-                    </li>
-                    <li>
-                        <a href="#testboard"><em>&#9762;</em>试验台</a>
-                    </li>
-                </ul>
+                <div class="nav-content nav-main">
+                    <ul>
+                        <li>
+                            <a href="#product"><em>&#9998;</em>作品</a>
+                        </li>
+                        <li>
+                            <a href="#project"><em>&#x265e;</em>项目</a>
+                        </li>
+                        <li>
+                            <a href="#resume"><em>&#x2618;</em>简历</a>
+                        </li>
+                        <li>
+                            <a href="#testboard"><em>&#9762;</em>试验台</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="nav-content nav-sub hide">
+                    <ul>
+                        <li>
+                            <a href="#" class="return-btn"><em>&#x25c1;</em></a>
+                        </li>
+                        <li>
+                            <a href="#" data-panel="test-1">羽化擦除</a>
+                        </li>
+                        <li>
+                            <a href="#" data-panel="test-2">试验台2</a>
+                        </li>
+                        <li>
+                            <a href="#" data-panel="test-3">试验台3</a>
+                        </li>
+                    </ul>
+                </div>
             </div>
 
             <div class="contents">
@@ -158,7 +176,15 @@
                     </div>
                 </div>
                 <div id="testboard" class="section testboard">
-                    ...
+                    <div id="test-1" class="panel show black-bg">
+                        <div class="consoles"></div>
+                        <canvas id="spume-canvas" class="bd white-bd" width="750" height="450"></canvas>
+                        <img id="spume" src="images/0030.jpg" style="width: 500px; height: 300px; margin-left: 20px">
+                    </div>
+                    <div id="test-2" class="panel">
+                    </div>
+                    <div id="test-3" class="panel">
+                    </div>
                 </div>
 
             </div>

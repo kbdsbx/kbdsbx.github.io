@@ -13,7 +13,10 @@
     "gulp-html-replace": "^1.6.2",
     "gulp-less": "^3.3.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "jQuery": "^1.7.4",
+    "requirejs": "^2.3.3"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
