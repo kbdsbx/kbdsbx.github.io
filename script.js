@@ -228,7 +228,7 @@ require( [ "jquery", "consoles" ], function( _jquery, _consoles ) {
                             .pipe( Img.bools, { range: _v } )
                             .draw( _can );
 
-                        c2.log( `bools.` );
+                        c2.log( `bools separate by ${_v}.` );
                     } );
                 } );
         } )
