@@ -7,8 +7,7 @@
     .hl-half-bd;
     .hoary-bg;
     .font-12;
-    overflow-x : hidden;
-    overflow-y : auto;
+    .of-hd;
     bottom: 70px;
     right: 20px;
     width: 300px;
@@ -18,13 +17,6 @@
     .opacity;
     .ani( opacity );
 
-    &::-webkit-scrollbar {
-        width: 5px;
-    }
-    &::-webkit-scrollbar-thumb {
-        .hl-half-bg;
-    }
-
     &.consoles-hide {
         .transparency;
         .events-none;
@@ -33,6 +25,20 @@
     p {
         .gray;
         margin-bottom: 10px;
+    }
+
+    .consoles-contents {
+        .full;
+        .h-full;
+        overflow-x : hidden;
+        overflow-y : auto;
+
+        &::-webkit-scrollbar {
+            width: 5px;
+        }
+        &::-webkit-scrollbar-thumb {
+            .hl-half-bg;
+        }
     }
 
     .consoles-n {
