@@ -60,7 +60,7 @@ require( [ "jquery", "consoles" ], function( _jquery, _consoles ) {
         }, 2000 );
     } );
 
-    $( window ).on( 'mousewheel', function() {
+    $( window ).on( 'mousewheel touchstart', function() {
         $( '.main-section .next-box' ).removeClass( 'show' ).addClass( 'never' );
 
         if ( $( '.nav' ).is( ':not(.show)' ) ) {
@@ -77,14 +77,14 @@ require( [ "jquery", "consoles" ], function( _jquery, _consoles ) {
             return false;
         }
         var _old = '#' + $( '.section.show' ).attr( 'id' );
+        if ( $( _old ).length <= 0 ) {
+            $( '.main-section' ).addClass( 'hide' );
+        }
+
         $( '.nav li' ).removeClass( 'active' );
         $( this ).parent( 'li' ).addClass( 'active' );
         var _hash = _new.substr( 1 );
         $( '.nav' ).removeClass( 'product-bg, project-bg' ).addClass( _hash + '-bg' );
-
-        if ( !_old ) {
-            $( '.main-section' ).addClass( 'hide' );
-        }
 
         $( '.contents' ).trigger( 'change', [ _new, _old ] );
 
