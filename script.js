@@ -160,11 +160,40 @@ require( [ "jquery", "consoles" ], function( _jquery, _consoles ) {
         c2.log( 'test 02 [sobel] init...' );
 
         require( [ './tests/sobel/sobel.js' ], function() {
-            var img = new Img( './images/0046.jpg', 640, 360 );
-            var _can = $( '#sobel-canvas' ).get(0);
-
-            img.draw( _can );
             c2.log( 'sobel.js loaded.' );
+
+            var img = new Img( './images/0046.jpg', 640, 360, function() {
+                c2.log( `image [${img.path}] loaded; w: ${this.width} h: ${this.height}` );
+
+                var _can = $( '#sobel-canvas' ).get(0);
+                img
+                    .draw( _can );
+
+                $( '#test-2 .btn.reset' ).on( 'click', function() {
+                    img
+                        .reset()
+                        .draw( _can );
+
+                    c2.log( `reset.` );
+                } );
+                $( '#test-2 .btn.grayed' ).on( 'click', function() {
+                    img
+                        .reset()
+                        .pipe( Img.grayed )
+                        .draw( _can );
+
+                    c2.log( `grayed.` );
+                } );
+                $( '#test-2 .btn.edge' ).on( 'click', function() {
+                    img
+                        .reset()
+                        .pipe( Img.grayed )
+                        .pipe( Img.sobel )
+                        .draw( _can );
+
+                    c2.log( `edge used as sobeloperator.` );
+                } );
+            } );
         } )
     } );
 
