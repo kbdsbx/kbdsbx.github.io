@@ -99,15 +99,42 @@ class Img {
 
         let g = Math.min( 255, Math.floor( Math.abs( gx ) + Math.abs( gy ) ) );
 
-        return [ g, g, g, 255 ];
+        return [ g, g, g, img.a( x, y ) ];
     }
 
-    pipe ( func ) {
+    static sobel2( img, x, y ) {
+        // | -2 -1 0 |   | (x-1,y-1) (x,y-1) (x+1,y-1) |
+        // | -1 0 +1 | * | (x-1,y)   (x,y)   (x+1,y)   |
+        // | 0 +1 +2 |   | (x-1,y+1) (x,y+1) (x+1,y+1) |
+        let gx = 
+            -2 * img.r( x-1, y-1 ) + -1 * img.r( x, y-1 ) +
+            -1 * img.r( x-1, y ) +  img.r( x+1, y ) + 
+            img.r( x, y+1 ) + 2 * img.r( x+1, y+1 );
+
+        // | 0 -1 -2 |   | (x-1,y-1) (x,y-1) (x+1,y-1) |
+        // | +1 0 -1 | * | (x-1,y)   (x,y)   (x+1,y)   |
+        // | +2 +1 0 |   | (x-1,y+1) (x,y+1) (x+1,y+1) |
+        // let gy = 
+        //     -1 * img.r( x, y-1 ) + -2 * img.r( x+1, y-1 ) +
+        //     img.r( x-1, y ) +  img.r( x+1, y ) + 
+        //     2 * img.r( x-1, y+1 ) + img.r( x, y+1 );
+
+        let g = Math.max( 0, Math.min( 255, Math.floor( Math.abs( gx ) ) ) );
+
+        return [ g, g, g, img.a( x, y ) ];
+    }
+
+    static bools( img, x, y, args ) {
+        var t = img.r( x, y ) > ( args ? args.range : 128.5 ) ? 255 : 0;
+        return [ t, t, t, img.a( x, y ) ];
+    }
+
+    pipe ( func, args ) {
         var _tmp_data = [];
 
         for ( let y = 0; y < this.height; y++ ) {
             for ( let x = 0; x < this.width; x++ ) {
-                let vals = func( this, x, y );
+                let vals = func( this, x, y, args );
                 _tmp_data.push( vals[0] );
                 _tmp_data.push( vals[1] );
                 _tmp_data.push( vals[2] );

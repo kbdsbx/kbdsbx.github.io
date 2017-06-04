@@ -141,6 +141,11 @@ require( [ "jquery", "consoles" ], function( _jquery, _consoles ) {
         $e.trigger( 'show' );
     } );
 
+    $( '.btns .btn' ).on( 'click', function() {
+        $( this ).parents( '.btns' ).find( '.active' ).removeClass( 'active' );
+        $( this ).addClass( 'active' );
+    } );
+
     consoles = new _consoles( $( '#test-1 .consoles' ).get(0) );
     $( '#test-1' ).on( 'load', function() {
         consoles.log( 'test 01 [抹除图片] init...' );
@@ -196,6 +201,34 @@ require( [ "jquery", "consoles" ], function( _jquery, _consoles ) {
                             .draw( _can );
 
                         c2.log( `edge used as sobeloperator.` );
+                    } );
+                    $( '#test-2 .btn.edge2' ).on( 'click', function() {
+                        img
+                            .reset()
+                            .pipe( Img.grayed )
+                            .pipe( Img.sobel2 )
+                            .draw( _can );
+
+                        c2.log( `edge with 45° used as sobeloperator.` );
+                    } );
+                    $( '#test-2 .btn.bools' ).on( 'click', function() {
+                        img
+                            .reset()
+                            .pipe( Img.grayed )
+                            .pipe( Img.bools, { range: $( '#test-2 .sub-opts [name="bools-range"]' ).val() } )
+                            .draw( _can );
+
+                        c2.log( `bools.` );
+                    } );
+                    $( '#test-2 .sub-opts [name="bools-range"]' ).on( 'change', function() {
+                        var _v = $( this ).val();
+                        img
+                            .reset()
+                            .pipe( Img.grayed )
+                            .pipe( Img.bools, { range: _v } )
+                            .draw( _can );
+
+                        c2.log( `bools.` );
                     } );
                 } );
         } )

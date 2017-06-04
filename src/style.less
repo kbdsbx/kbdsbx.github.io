@@ -348,12 +348,22 @@ body {
                     .bd;
                     .hoary-bd;
                     .text-center;
-                    .active,
+
+                    &.active,
                     &:active {
                         .hl-bg;
+
+                        & + .sub-opts {
+                            .block;
+                        }
                     }
+
                     padding: 3px;
                     margin-bottom: 5px;
+                }
+
+                .sub-opts {
+                    .none;
                 }
             }
         }
