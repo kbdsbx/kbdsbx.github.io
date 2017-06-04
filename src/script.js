@@ -17,10 +17,9 @@ require.config({
     }
 })
 
-var $, consoles;
+var $, consoles, c2;
 require( [ "jquery", "consoles" ], function( _jquery, _consoles ) {
     $ = _jquery;
-    consoles = _consoles;
 
     var _resize = function() {
         $( '.main-section' )
@@ -142,17 +141,31 @@ require( [ "jquery", "consoles" ], function( _jquery, _consoles ) {
         $e.trigger( 'show' );
     } );
 
+    consoles = new _consoles( $( '#test-1 .consoles' ).get(0) );
     $( '#test-1' ).on( 'load', function() {
         consoles.log( 'test 01 [抹除图片] init...' );
 
         require( [ './tests/spume/spume.js' ], function() {
-            consoles.log( 'spume.js loaded' );
+            consoles.log( 'spume.js loaded.' );
             consoles.log( '请在左侧白框区域内涂抹' );
         } )
     } );
 
     $( '#test-1' ).on( 'show', function() {
         consoles.log( 'test 01 shown.' );
+    } );
+
+    c2 = new _consoles( $( '#test-2 .consoles' ).get(0) );
+    $( '#test-2' ).on( 'load', function() {
+        c2.log( 'test 02 [sobel] init...' );
+
+        require( [ './tests/sobel/sobel.js' ], function() {
+            var img = new Img( './images/0046.jpg', 640, 360 );
+            var _can = $( '#sobel-canvas' ).get(0);
+
+            img.draw( _can );
+            c2.log( 'sobel.js loaded.' );
+        } )
     } );
 
 } );

@@ -8,7 +8,7 @@
     .hoary-bg;
     .font-12;
     overflow-x : hidden;
-    overflow-y : scroll;
+    overflow-y : auto;
     bottom: 70px;
     right: 20px;
     width: 300px;
@@ -18,6 +18,13 @@
     .opacity;
     .ani( opacity );
 
+    &::-webkit-scrollbar {
+        width: 5px;
+    }
+    &::-webkit-scrollbar-thumb {
+        .hl-half-bg;
+    }
+
     &.consoles-hide {
         .transparency;
         .events-none;
@@ -26,5 +33,125 @@
     p {
         .gray;
         margin-bottom: 10px;
+    }
+
+    .consoles-n {
+        .absolute;
+        .top;
+        .left;
+        .full;
+        .z-low;
+        height: 10px;
+        cursor: n-resize;
+        .ani( background-color );
+
+        &:hover {
+            .gray-bg;
+        }
+    }
+
+    .consoles-s {
+        .absolute;
+        .bottom;
+        .left;
+        .full;
+        .z-low;
+        height: 10px;
+        cursor: s-resize;
+        .ani( background-color );
+
+        &:hover {
+            .gray-bg;
+        }
+    }
+    
+    .consoles-w {
+        .absolute;
+        .top;
+        .left;
+        .h-full;
+        .z-low;
+        width: 10px;
+        cursor: w-resize;
+        .ani( background-color );
+
+        &:hover {
+            .gray-bg;
+        }
+    }
+    
+    .consoles-e {
+        .absolute;
+        .top;
+        .right;
+        .h-full;
+        .z-low;
+        width: 10px;
+        cursor: e-resize;
+        .ani( background-color );
+
+        &:hover {
+            .gray-bg;
+        }
+    }
+    
+    .consoles-nw {
+        .absolute;
+        .top;
+        .left;
+        .z-middle;
+        width: 10px;
+        height: 10px;
+        cursor: nw-resize;
+        .ani( background-color );
+
+        &:hover {
+            .gray-bg;
+        }
+    }
+    
+    .consoles-ne {
+        .absolute;
+        .top;
+        .right;
+        .z-middle;
+        width: 10px;
+        height: 10px;
+        cursor: ne-resize;
+        .ani( background-color );
+
+        &:hover {
+            .gray-bg;
+        }
+    }
+    
+    .consoles-sw {
+        .absolute;
+        .bottom;
+        .left;
+        .z-middle;
+        width: 10px;
+        height: 10px;
+        cursor: sw-resize;
+        .ani( background-color );
+
+        &:hover {
+            .gray-bg;
+        }
+    }
+    
+    .consoles-se {
+        .absolute;
+        .bottom;
+        .right;
+        .z-middle;
+        width: 10px;
+        height: 10px;
+        cursor: se-resize;
+        .ani( background-color );
+
+        &:hover {
+            .gray-bg;
+        }
     }
 }
