@@ -162,19 +162,19 @@ require( [ "jquery", "consoles" ], function( _jquery, _consoles ) {
 
     c2 = new _consoles( $( '#test-2 .consoles' ).get(0) );
     $( '#test-2' ).on( 'load', function() {
-        c2.log( 'test 02 [sobel] init...' );
+        c2.log( 'test 02 [effects] init...' );
 
-        require( [ './tests/sobel/sobel.js' ], function() {
-            c2.log( 'sobel.js loaded.' );
+        require( [ './lib/img/img.js', './tests/effect/effect.js' ], function() {
+            c2.log( 'effect.js loaded.' );
 
             var img = new Img(
                 './images/0046.jpg',
-                parseInt( $( '#sobel-canvas' ).attr( 'width' ) ),
-                parseInt( $( '#sobel-canvas' ).attr( 'height' ) ),
+                parseInt( $( '#effect-canvas' ).attr( 'width' ) ),
+                parseInt( $( '#effect-canvas' ).attr( 'height' ) ),
                 function() {
                     c2.log( `image [${img.path}] loaded; w: ${this.width} h: ${this.height}` );
 
-                    var _can = $( '#sobel-canvas' ).get(0);
+                    var _can = $( '#effect-canvas' ).get(0);
                     img
                         .draw( _can );
 
@@ -188,7 +188,7 @@ require( [ "jquery", "consoles" ], function( _jquery, _consoles ) {
                     $( '#test-2 .btn.grayed' ).on( 'click', function() {
                         img
                             .reset()
-                            .pipe( Img.grayed )
+                            .pipe( Effect.grayed )
                             .draw( _can );
 
                         c2.log( `grayed.` );
@@ -196,8 +196,8 @@ require( [ "jquery", "consoles" ], function( _jquery, _consoles ) {
                     $( '#test-2 .btn.edge' ).on( 'click', function() {
                         img
                             .reset()
-                            .pipe( Img.grayed )
-                            .pipe( Img.sobel )
+                            .pipe( Effect.grayed )
+                            .pipe( Effect.sobel )
                             .draw( _can );
 
                         c2.log( `edge used as sobeloperator.` );
@@ -205,8 +205,8 @@ require( [ "jquery", "consoles" ], function( _jquery, _consoles ) {
                     $( '#test-2 .btn.edge2' ).on( 'click', function() {
                         img
                             .reset()
-                            .pipe( Img.grayed )
-                            .pipe( Img.sobel2 )
+                            .pipe( Effect.grayed )
+                            .pipe( Effect.sobel2 )
                             .draw( _can );
 
                         c2.log( `edge with 45° used as sobeloperator.` );
@@ -214,30 +214,59 @@ require( [ "jquery", "consoles" ], function( _jquery, _consoles ) {
                     $( '#test-2 .btn.bools' ).on( 'click', function() {
                         img
                             .reset()
-                            .pipe( Img.grayed )
-                            .pipe( Img.bools, { range: $( '#test-2 .sub-opts [name="bools-range"]' ).val() } )
+                            .pipe( Effect.grayed )
+                            .pipe( Effect.bools, { range: $( '#test-2 .sub-opts [name="bools-range"]' ).val() } )
                             .draw( _can );
 
                         c2.log( `bools.` );
+                    } );
+                    $( '#test-2 .btn.layering' ).on( 'click', function() {
+                        img
+                            .reset()
+                            .pipe( Effect.grayed )
+                            .pipe( Effect.layering )
+                            .draw( _can );
+
+                        c2.log( `layering.` );
                     } );
                     $( '#test-2 .sub-opts [name="bools-range"]' ).on( 'change', function() {
                         var _v = $( this ).val();
                         img
                             .reset()
-                            .pipe( Img.grayed )
-                            .pipe( Img.bools, { range: _v } )
+                            .pipe( Effect.grayed )
+                            .pipe( Effect.bools, { range: _v } )
                             .draw( _can );
 
-                        c2.log( `bools separate by ${_v}.` );
+                        c2.log( `bools separate with ${_v}.` );
                     } );
                     $( '#test-2 .btn.relievo' ).on( 'click', function() {
                         img
                             .reset()
-                            .pipe( Img.relievo )
-                            .pipe( Img.grayed )
+                            .pipe( Effect.relievo )
+                            .pipe( Effect.grayed )
                             .draw( _can );
 
                         c2.log( `relievo.` );
+                    } );
+                    $( '#test-2 .btn.oil' ).on( 'click', function() {
+                        c2.log( `time for oily effect processing is longer, please patiently ...` );
+
+                        setTimeout( function() {
+                            img
+                                .reset()
+                                .pipe( Effect.oil )
+                                .draw( _can );
+
+                            c2.log( `oily.` );
+                        }, 100 )
+                    } );
+                    $( '#test-2 .btn.gauss_blur' ).on( 'click', function() {
+                        img
+                            .reset()
+                            .pipe( Effect.gauss_blur )
+                            .draw( _can );
+
+                        c2.log( `Gauss blur.` );
                     } );
                 } );
         } )
