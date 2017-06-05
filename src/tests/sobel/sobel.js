@@ -129,6 +129,31 @@ class Img {
         return [ t, t, t, img.a( x, y ) ];
     }
 
+    static relievo( img, x, y ) {
+        var cr = img.r( x,y );
+        var r =
+            ( cr - img.r( x-1, y-1 ) ) + ( cr - img.r( x, y-1 ) ) + ( cr - img.r( x+1, y-1 ) ) +
+            ( cr - img.r( x-1, y ) ) + ( cr - img.r( x, y ) ) + ( cr - img.r( x+1, y ) ) +
+            ( cr - img.r( x-1, y+1 ) ) + ( cr - img.r( x, y + 1 ) ) + ( cr - img.r( x+1, y+1 ) )
+            + 128;
+
+        var cg = img.g( x,y );
+        var g =
+            ( cg - img.g( x-1, y-1 ) ) + ( cg - img.g( x, y-1 ) ) + ( cg - img.g( x+1, y-1 ) ) +
+            ( cg - img.g( x-1, y ) ) + ( cg - img.g( x, y ) ) + ( cg - img.g( x+1, y ) ) +
+            ( cg - img.g( x-1, y+1 ) ) + ( cg - img.g( x, y + 1 ) ) + ( cg - img.g( x+1, y+1 ) )
+            + 128;
+
+        var cb = img.b( x,y );
+        var b =
+            ( cb - img.b( x-1, y-1 ) ) + ( cb - img.b( x, y-1 ) ) + ( cb - img.b( x+1, y-1 ) ) +
+            ( cb - img.b( x-1, y ) ) + ( cb - img.b( x, y ) ) + ( cb - img.b( x+1, y ) ) +
+            ( cb - img.b( x-1, y+1 ) ) + ( cb - img.b( x, y + 1 ) ) + ( cb - img.b( x+1, y+1 ) )
+            + 128;
+
+        return [ r, g, b, img.a( x, y ) ];
+    }
+
     pipe ( func, args ) {
         var _tmp_data = [];
 
@@ -145,6 +170,7 @@ class Img {
         for ( let i = 0; i < _tmp_data.length; i++ ) {
             this.img_data.data[i] = _tmp_data[i];
         }
+        // this.img_data = new ImageData( new Uint8ClampedArray( _tmp_data ), this.width, this.height );
 
         return this;
     }

@@ -230,6 +230,15 @@ require( [ "jquery", "consoles" ], function( _jquery, _consoles ) {
 
                         c2.log( `bools separate by ${_v}.` );
                     } );
+                    $( '#test-2 .btn.relievo' ).on( 'click', function() {
+                        img
+                            .reset()
+                            .pipe( Img.relievo )
+                            .pipe( Img.grayed )
+                            .draw( _can );
+
+                        c2.log( `relievo.` );
+                    } );
                 } );
         } )
     } );
