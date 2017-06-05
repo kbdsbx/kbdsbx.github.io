@@ -211,15 +211,20 @@ require( [ "jquery", "consoles" ], function( _jquery, _consoles ) {
 
                         c2.log( `edge with 45° used as sobeloperator.` );
                     } );
-                    $( '#test-2 .btn.bools' ).on( 'click', function() {
+
+                    var bools_event = function() {
+                        var _v = $( '#test-2 .sub-opts [name="bools-range"]' ).val();
                         img
                             .reset()
                             .pipe( Effect.grayed )
-                            .pipe( Effect.bools, { range: $( '#test-2 .sub-opts [name="bools-range"]' ).val() } )
+                            .pipe( Effect.bools, { range: _v } )
                             .draw( _can );
 
-                        c2.log( `bools.` );
-                    } );
+                        c2.log( `bools separate with ${_v}.` );
+                    };
+                    $( '#test-2 .sub-opts [name="bools-range"]' ).on( 'change', bools_event );
+                    $( '#test-2 .btn.bools' ).on( 'click', bools_event );
+
                     $( '#test-2 .btn.layering' ).on( 'click', function() {
                         img
                             .reset()
@@ -228,16 +233,6 @@ require( [ "jquery", "consoles" ], function( _jquery, _consoles ) {
                             .draw( _can );
 
                         c2.log( `layering.` );
-                    } );
-                    $( '#test-2 .sub-opts [name="bools-range"]' ).on( 'change', function() {
-                        var _v = $( this ).val();
-                        img
-                            .reset()
-                            .pipe( Effect.grayed )
-                            .pipe( Effect.bools, { range: _v } )
-                            .draw( _can );
-
-                        c2.log( `bools separate with ${_v}.` );
                     } );
                     $( '#test-2 .btn.relievo' ).on( 'click', function() {
                         img
@@ -260,14 +255,38 @@ require( [ "jquery", "consoles" ], function( _jquery, _consoles ) {
                             c2.log( `oily.` );
                         }, 100 )
                     } );
-                    $( '#test-2 .btn.gauss_blur' ).on( 'click', function() {
+
+                    var gauss_blur_event = function() {
+                        var _v = $( '#test-2 .sub-opts [name="gauss-blur-range"]' ).val();
+
                         img
                             .reset()
-                            .pipe( Effect.gauss_blur )
+                            .pipe( Effect.gauss_blur, { range: _v } )
                             .draw( _can );
 
-                        c2.log( `Gauss blur.` );
-                    } );
+                        c2.log( `Gauss blur with ${_v}.` );
+                        if ( _v >= 5 ) {
+                            c2.log( `如果你看不清左面的图片，请注意身体，不要撸太多哦。` );
+                        }
+                    }
+
+                    $( '#test-2 .btn.gauss_blur' ).on( 'click', gauss_blur_event );
+                    $( '#test-2 .sub-opts [name="gauss-blur-range"]' ).on( 'change', gauss_blur_event );
+
+                    var blur_event = function() {
+                        var _v = $( '#test-2 .sub-opts [name="blur-range"]' ).val()
+                        img
+                            .reset()
+                            .pipe( Effect.blur, { range : _v } )
+                            .draw( _can );
+
+                        c2.log( `blur range with ${_v}.` );
+                        if ( _v >= 5 ) {
+                            c2.log( `如果你看不清左面的图片，请注意身体，不要撸太多哦。` );
+                        }
+                    }
+                    $( '#test-2 .btn.blur' ).on( 'click', blur_event );
+                    $( '#test-2 .sub-opts [name="blur-range"]' ).on( 'change', blur_event );
                 } );
         } )
     } );

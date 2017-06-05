@@ -58,13 +58,14 @@ class Effect {
         return [ g, g, g, img.a( x, y ) ];
     }
 
-    static gauss_blur( img, x, y ) {
-        var range = 2;
+    static gauss_blur( img, x, y, args ) {
+        var range = args ? args.range : 2;
+        var _r = 1 / ( range * range );
         var gauss = ( x, y ) => {
             // PI = 3.1415926
-            // sigma = 1
+            // sigma = range
             // mu = 0
-            return 0.15915494580678602 * Math.exp( ( x * x + y * y ) * -.5 );
+            return 0.15915494580678602 * _r * Math.exp( ( x * x + y * y ) * -.5 * _r );
         }
 
         var c = [ 0, 0, 0, img.a( x, y ) ];
@@ -74,15 +75,61 @@ class Effect {
                 var _t = gauss( fx, fy );
                 gauss_sum += _t;
 
-                c[0] += _t * img.r( x + fx, y + fy );
-                c[1] += _t * img.g( x + fx, y + fy );
-                c[2] += _t * img.b( x + fx, y + fy );
+                var nx = x + fx, ny = y + fy;
+                if ( nx < 0 ) {
+                    nx = -nx;
+                }
+                if ( nx >= img.width ) {
+                    nx = img.width - ( nx - img.width ) - 1;
+                }
+                if ( ny < 0 ) {
+                    ny = -ny;
+                }
+                if ( ny >= img.height ) {
+                    ny = img.height - ( ny - img.height ) - 1;
+                }
+
+                c[0] += _t * img.r( nx, ny );
+                c[1] += _t * img.g( nx, ny );
+                c[2] += _t * img.b( nx, ny );
             }
         }
 
         c[0] /= gauss_sum;
         c[1] /= gauss_sum;
         c[2] /= gauss_sum;
+
+        return c;
+    }
+
+    static blur ( img, x, y, args ) {
+        var range = args ? args.range : 4;
+
+        var c = [ 0, 0, 0, img.a( x, y ) ];
+        for ( let fx = -range; fx < range; fx++ ) {
+            for ( let fy = -range; fy < range; fy++ ) {
+                var nx = x + fx, ny = y + fy;
+                if ( nx < 0 ) {
+                    nx = -nx;
+                }
+                if ( nx >= img.width ) {
+                    nx = img.width - ( nx - img.width ) - 1;
+                }
+                if ( ny < 0 ) {
+                    ny = -ny;
+                }
+                if ( ny >= img.height ) {
+                    ny = img.height - ( ny - img.height ) - 1;
+                }
+                c[0] += img.r( nx, ny );
+                c[1] += img.g( nx, ny );
+                c[2] += img.b( nx, ny );
+            }
+        }
+
+        c[0] = Math.floor( c[0] / Math.pow( range * 2, 2 ) );
+        c[1] = Math.floor( c[1] / Math.pow( range * 2, 2 ) );
+        c[2] = Math.floor( c[2] / Math.pow( range * 2, 2 ) );
 
         return c;
     }
