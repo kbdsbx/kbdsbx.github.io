@@ -259,15 +259,22 @@ require( [ "jquery", "consoles" ], function( _jquery, _consoles ) {
                     var gauss_blur_event = function() {
                         var _v = $( '#test-2 .sub-opts [name="gauss-blur-range"]' ).val();
 
-                        img
-                            .reset()
-                            .pipe( Effect.gauss_blur, { range: _v } )
-                            .draw( _can );
-
-                        c2.log( `Gauss blur with ${_v}.` );
                         if ( _v >= 5 ) {
-                            c2.log( `如果你看不清左面的图片，请注意身体，不要撸太多哦。` );
+                            c2.log( `Gauss blur with ${_v} range which processing is longer, please patiently ...` );
                         }
+
+                        setTimeout( function() {
+                            
+                            img
+                                .reset()
+                                .pipe( Effect.gauss_blur, { range: _v } )
+                                .draw( _can );
+
+                            c2.log( `Gauss blur with ${_v}.` );
+                            if ( _v >= 5 ) {
+                                c2.log( `如果你看不清左面的图片，请注意身体，不要撸太多哦。` );
+                            }
+                        }, 100 );
                     }
 
                     $( '#test-2 .btn.gauss_blur' ).on( 'click', gauss_blur_event );
@@ -275,18 +282,64 @@ require( [ "jquery", "consoles" ], function( _jquery, _consoles ) {
 
                     var blur_event = function() {
                         var _v = $( '#test-2 .sub-opts [name="blur-range"]' ).val()
-                        img
-                            .reset()
-                            .pipe( Effect.blur, { range : _v } )
-                            .draw( _can );
 
-                        c2.log( `blur range with ${_v}.` );
                         if ( _v >= 5 ) {
-                            c2.log( `如果你看不清左面的图片，请注意身体，不要撸太多哦。` );
+                            c2.log( `blur with ${_v} range which processing is longer, please patiently ...` );
                         }
+
+                        setTimeout( function() {
+
+                            img
+                                .reset()
+                                .pipe( Effect.blur, { range : _v } )
+                                .draw( _can );
+
+                            c2.log( `blur range with ${_v}.` );
+
+                            if ( _v >= 5 ) {
+                                c2.log( `如果你看不清左面的图片，请注意身体，不要撸太多哦。` );
+                            }
+                        }, 100 );
                     }
                     $( '#test-2 .btn.blur' ).on( 'click', blur_event );
                     $( '#test-2 .sub-opts [name="blur-range"]' ).on( 'change', blur_event );
+
+                    $( '#test-2 .btn.glow' ).on( 'click', function() {
+                        img
+                            .reset()
+                            .pipe( Effect.glow )
+                            .draw( _can );
+
+                        c2.log( `glow.` );
+                    } );
+                    $( '#test-2 .btn.inverse' ).on( 'click', function() {
+                        img
+                            .reset()
+                            .pipe( Effect.inverse )
+                            .draw( _can );
+
+                        c2.log( `inverse.` );
+                    } );
+                    $( '#test-2 .btn.sketch' ).on( 'click', function() {
+                        img
+                            .reset()
+                            .pipe( Effect.sketch )
+                            .draw( _can );
+
+                        c2.log( `sketch.` );
+                    } );
+                    $( '#test-2 .btn.wave' ).on( 'click', function() {
+                        var _r = 1;
+                        // setInterval( function() {
+                            img
+                                .reset()
+                                .pipe( Effect.wave, { radian : _r } )
+                                .draw( _can );
+                            _r += 1;
+                        // }, 15 );
+
+                        c2.log( `wave.` );
+                    } );
                 } );
         } )
     } );

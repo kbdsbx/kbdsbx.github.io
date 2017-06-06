@@ -2,17 +2,11 @@
 
 class Effect {
 
-    static grayed( r, g, b, a ) {
-        var t = Math.min( Math.ceil( r * .3 + g * .6 + b * .1 ), 255 );
-        return [ t, t, t, a ];
-    }
-
     static grayed( img, x, y ) {
         // 0.3r + 0.59g + 0.11b
         let s = img.r( x, y ) * .3 + img.g( x, y ) * .59 + img.b( x, y ) * .11;
-        let t = Math.min( Math.ceil( s ), 255 );
 
-        return [ t, t, t, img.a( x, y ) ];
+        return [ s, s, s, img.a( x, y ) ];
     }
 
     static sobel( img, x, y ) {
@@ -31,7 +25,7 @@ class Effect {
             img.r( x-1, y-1 ) + 2 * img.r( x, y-1 ) + img.r( x+1, y-1 ) +
             -1 * img.r( x-1, y+1 ) + -2 * img.r( x, y+1 ) + -1 * img.r( x+1, y+1 );
 
-        let g = Math.min( 255, Math.floor( Math.abs( gx ) + Math.abs( gy ) ) );
+        let g = Math.abs( gx ) + Math.abs( gy );
 
         return [ g, g, g, img.a( x, y ) ];
     }
@@ -53,7 +47,7 @@ class Effect {
         //     img.r( x-1, y ) +  img.r( x+1, y ) + 
         //     2 * img.r( x-1, y+1 ) + img.r( x, y+1 );
 
-        let g = Math.max( 0, Math.min( 255, Math.floor( Math.abs( gx ) ) ) );
+        let g = Math.abs( gx );
 
         return [ g, g, g, img.a( x, y ) ];
     }
@@ -127,9 +121,9 @@ class Effect {
             }
         }
 
-        c[0] = Math.floor( c[0] / Math.pow( range * 2, 2 ) );
-        c[1] = Math.floor( c[1] / Math.pow( range * 2, 2 ) );
-        c[2] = Math.floor( c[2] / Math.pow( range * 2, 2 ) );
+        c[0] = c[0] / Math.pow( range * 2, 2 );
+        c[1] = c[1] / Math.pow( range * 2, 2 );
+        c[2] = c[2] / Math.pow( range * 2, 2 );
 
         return c;
     }
@@ -213,11 +207,46 @@ class Effect {
             c[1] += img.g( _groups[max][i][0], _groups[max][i][1] )
             c[2] += img.b( _groups[max][i][0], _groups[max][i][1] )
         }
-        c[0] = Math.floor( c[0] / _groups[max].length );
-        c[1] = Math.floor( c[1] / _groups[max].length );
-        c[2] = Math.floor( c[2] / _groups[max].length );
+        c[0] = c[0] / _groups[max].length;
+        c[1] = c[1] / _groups[max].length;
+        c[2] = c[2] / _groups[max].length;
 
         return c;
+    }
+
+    static glow ( img, x, y ) {
+        var gc = Effect.gauss_blur( img, x, y );
+        var oc = [ img.r( x, y ), img.g( x, y ), img.b( x, y ), img.a( x, y ) ];
+        var c = [
+            ( oc[0] <= 128 ? ( gc[0] * oc[0] / 128 ) : ( 255 - ( 255 - gc[0] ) * ( 255 - oc[0] ) / 128 ) ),
+            ( oc[1] <= 128 ? ( gc[1] * oc[1] / 128 ) : ( 255 - ( 255 - gc[1] ) * ( 255 - oc[1] ) / 128 ) ),
+            ( oc[2] <= 128 ? ( gc[2] * oc[2] / 128 ) : ( 255 - ( 255 - gc[2] ) * ( 255 - oc[2] ) / 128 ) ),
+            oc[3]
+        ];
+
+        return c;
+    }
+
+    static inverse ( img, x, y ) {
+        return [ 255 - img.r( x, y ), 255 - img.g( x, y ), 255 - img.b( x, y ), img.a( x, y ) ];
+    }
+
+    static sketch( img, x, y ) {
+        // after grayed and inverse.
+        var gyc = Effect.grayed( img, x, y );
+        var gc = Effect.gauss_blur( img, x, y );
+        var g = 255 - ( gc[0] * .3 + gc[1] * .59 + gc[2] * .11 );
+        var t = gyc[0] + ( gyc[0] * g ) / ( 256 - g );
+
+        return [ t, t, t, img.a( x, y ) ];
+    }
+
+    static wave( img, x, y, args ) {
+        var radian = args ? args.radian : 0;
+        var nx = Math.floor( x + Math.sin( ( x + radian ) / ( Math.PI * 3 ) ) * 5 );
+        var ny = Math.floor( y + Math.sin( ( y + radian ) / ( Math.PI * 3 ) ) * 5 );
+
+        return [ img.r( nx, ny ), img.g( nx, ny ), img.b( nx, ny ), img.a( nx, ny ) ];
     }
 }
 

@@ -21,7 +21,7 @@ class Img {
             _self.reset();
 
             if ( callback ) {
-                callback.call( this );
+                callback.call( _self );
             }
         };
         this.img.src = this.path;
@@ -82,7 +82,7 @@ class Img {
         }
 
         for ( let i = 0; i < _tmp_data.length; i++ ) {
-            this.img_data.data[i] = _tmp_data[i];
+            this.img_data.data[i] = Math.max( 0, Math.min( 255, Math.round(  _tmp_data[i] ) ) );
         }
         // this.img_data = new ImageData( new Uint8ClampedArray( _tmp_data ), this.width, this.height );
 
