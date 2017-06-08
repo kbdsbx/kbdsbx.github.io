@@ -17,7 +17,7 @@ require.config({
     }
 })
 
-var $, consoles, c2;
+var $, consoles, c2, c3;
 require( [ "jquery", "consoles" ], function( _jquery, _consoles ) {
     $ = _jquery;
 
@@ -344,4 +344,22 @@ require( [ "jquery", "consoles" ], function( _jquery, _consoles ) {
         } )
     } );
 
+    c3 = new _consoles( $( '#test-3 .consoles' ).get(0) );
+    $( '#test-3' ).on( 'load', function() {
+        c3.log( `test 03 [font] init.` );
+
+        require( [ './lib/fonts/fonts.js' ], function() {
+            c3.log( `library of fonts.js loaded.` );
+            var worker = new Worker( "./tests/fonts/fonts.js" );
+        } );
+            /*
+        require( [ './tests/fonts/fonts.js' ], function() {
+            c3.log( `fonts.js loaded.` );
+
+
+            var f = new Fonts( "./fonts/BahiaScriptSSK.ttf", function( data ) {
+            } );
+        } )
+        */
+    } );
 } );
