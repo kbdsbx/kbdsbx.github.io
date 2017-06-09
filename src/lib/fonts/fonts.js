@@ -2,18 +2,25 @@
 class stream {
     constructor ( buffer ) {
         this.__buffer = buffer;
-        this.__painter = 0;
+        this.__pointer = 0;
+        this.__reader = new DataView( this.__buffer );
     }
 
     getUint32 () {
-        var _t = new DataView( this.__buffer ).getUint32( this.__pointer, false );
-        this.__pointer +=4;
+        var _t = this.__reader.getUint32( this.__pointer, false );
+        this.__pointer += 4;
         return _t;
     }
 
     getUint16 () {
-        var _t = new DataView( this.__buffer ).getUint16( this.__pointer, false );
-        this.__pointer += 4;
+        var _t = this.__reader.getUint16( this.__pointer, false );
+        this.__pointer += 2;
+        return _t;
+    }
+
+    getUint8Array( length ) {
+        var _t = new Uint8Array( this.__buffer, this.__pointer, length );
+        this.__pointer += length;
         return _t;
     }
 
@@ -34,6 +41,11 @@ class stream {
             String.fromCharCode( _t >> 0 & 0xFF );
 
         return _r;
+    }
+
+    slice ( begin, end ) {
+        var _buff = this.__buffer.slice( begin, end );
+        return new stream( _buff );
     }
 }
 
@@ -56,9 +68,9 @@ class Fonts {
         xhr.onreadystatechange = function() {
             if ( xhr.readyState === 4 && xhr.status === 200 ) {
                 var rdr = new FileReaderSync();
-                var blob = rdr.readAsArrayBuffer( xhr.response );
-                _self.stream = new stream( blob );
-                // _self.data = xhr.response;
+                var buff = rdr.readAsArrayBuffer( xhr.response );
+                _self.stream = new stream( buff );
+
                 _self.parser();
             }
         }
@@ -77,64 +89,70 @@ class Fonts {
         var start = this.meta[ meta ].offset;
         var long = this.meta[ meta ].length;
 
-        return this.data.slice( start, start + long );
-    }
-
-    _get_uint_32 () {
-        var _b = this.data.slice( this.__pointer, this.__pointer + 4 );
-        this.__pointer += 4;
-
-        var _uint32 = this.rdr.readAsArrayBuffer( _b );
-        return new DataView( _uint32 ).getUint32( 0, false );
-    }
-
-    _get_uint_16 () {
-        var _b = this.data.slice( this.__pointer, this.__pointer + 2 );
-        this.__pointer += 2;
-
-        var _uint16 = this.rdr.readAsArrayBuffer( _b );
-        return new DataView( _uint16 ).getUint16( 0, false );
-    }
-
-    _put_uint_32 () {
-        this.__pointer -= 4;
-    }
-
-    _put_uint_16 () {
-        this.__pointer -= 2;
-    }
-
-    _turn_string( val ) {
-        var _r = "" +
-            String.fromCharCode( val >> 24 & 0xFF ) +
-            String.fromCharCode( val >> 16 & 0xFF ) +
-            String.fromCharCode( val >> 8 & 0xFF ) +
-            String.fromCharCode( val >> 0 & 0xFF );
-
-        return _r;
+        return this.stream.slice( start, start + long );
     }
 
     _parser_cmap () {
-        var b = this._get_sfnt( "cmap" );
+        var cmap_stream = this._get_sfnt( "cmap" );
+
+        this.cmap = {};
+
+        this.cmap.version = cmap_stream.getUint16();
+        this.cmap.numberSubtables = cmap_stream.getUint16();
+
+        this.cmap.encodingTables = [];
+
+        for ( let i = 0; i < this.cmap.numberSubtables; i++ ) {
+            var _enc = {};
+            _enc.platformID = cmap_stream.getUint16();
+            _enc.platformSpecificID = cmap_stream.getUint16();
+            _enc.offset = cmap_stream.getUint32();
+
+            this.cmap.encodingTables.push( _enc );
+        }
+
+        for ( let i = 0; i < this.cmap.numberSubtables; i++ ) {
+            var _formats = {};
+            cmap_stream.__pointer = this.cmap.encodingTables[i].offset;
+
+            _formats.format = cmap_stream.getUint16();
+
+            console.log( _formats.format );
+        }
+
+/*
+        var _t = {};
+        _t.format = this.stream.getUint16();
+        _t.length = this.stream.getUint16();
+        _t.language = this.stream.getUint16();
+        _t.glyphIndexArray = this.stream.getUint8Array( _t.length - 6 );
+
+        this.cmap.subTables.push( _t );
+        */
+
+        console.log( this.cmap );
     }
 
     parser () {
-        this._offset_subtable.scaler_type = this._get_uint_32();
-        this._offset_subtable.numTables = this._get_uint_16();
-        this._offset_subtable.searchRange = this._get_uint_16();
-        this._offset_subtable.entrySelector = this._get_uint_16();
-        this._offset_subtable.rangeShift = this._get_uint_16();
+        this._offset_subtable.scaler_type = this.stream.getUint32();
+        this._offset_subtable.numTables = this.stream.getUint16();
+        this._offset_subtable.searchRange = this.stream.getUint16();
+        this._offset_subtable.entrySelector = this.stream.getUint16();
+        this._offset_subtable.rangeShift = this.stream.getUint16();
+
+        console.log( this._offset_subtable );
 
         this.meta = {};
 
         var _label;
         var _label_list = Fonts.table_name();
+
         do {
-            _label = this._turn_string( this._get_uint_32() );
+            _label = this.stream.getChar4();
             if ( -1 !== _label_list.indexOf( _label ) ) {
-                var checkSum = this._get_uint_32(),
-                    offset = this._get_uint_32(),
-                    length = this._get_uint_32();
+                var checkSum = this.stream.getUint32(),
+                    offset = this.stream.getUint32(),
+                    length = this.stream.getUint32();
 
                 this.meta[ _label ] = {
                     tag : _label,
@@ -143,7 +161,7 @@ class Fonts {
                     length : length,
                 }
             } else {
-                this._put_uint_32();
+                this.stream.putUint32();
                 break;
             }
         } while ( 1 );
