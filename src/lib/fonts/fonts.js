@@ -6,6 +6,13 @@ class stream {
         this.__reader = new DataView( this.__buffer );
     }
 
+    // TODO: warning
+    getUint64 () {
+        var _t = new Uint8Array( this.__buffer, this.__pointer, 8 );
+        this.__pointer += 8;
+        return ( _t[0] << 56 ) + ( _t[1] << 48 ) + ( _t[2] << 40 ) + ( _t[3] << 32 ) + ( _t[4] << 24 ) + ( _t[5] << 16 ) + ( _t[6] << 8 ) + _t[7];
+    }
+
     getUint32 () {
         var _t = this.__reader.getUint32( this.__pointer, false );
         this.__pointer += 4;
@@ -19,7 +26,7 @@ class stream {
     }
 
     getInt16() {
-        var _t = this.__reader.getInt16( this.___pointer, false );
+        var _t = this.__reader.getInt16( this.__pointer, false );
         this.__pointer += 2;
         return _t;
     }
@@ -247,8 +254,102 @@ class head extends sfnt {
 
         this.majorVersion = this.stream.getUint16();
         this.minorVersion = this.stream.getUint16();
-
         this.fontRevison = this.stream.getFixed32();
+
+        this.checkSumAdjustment = this.stream.getUint32();
+        this.magicNumber = this.stream.getUint32();
+        this.flags = this.stream.getUint16();
+        this.unitsPerEm = this.stream.getUint16();
+        this.created = this.stream.getUint64();
+        this.modified = this.stream.getUint64();
+
+        this.xMin = this.stream.getInt16();
+        this.yMin = this.stream.getInt16();
+        this.xMax = this.stream.getInt16();
+        this.yMax = this.stream.getInt16();
+
+        this.macStyle = this.stream.getUint16();
+        this.lowestRecPPEM = this.stream.getUint16();
+        this.fontDirectionHint = this.stream.getInt16();
+        this.indexToLocFormat = this.stream.getInt16();
+        this.glyphDataFormat = this.stream.getInt16();
+
+        console.log( this );
+    }
+
+    get is_bold () {
+        return this.macStyle & 0B1;
+    }
+
+    get is_italic() {
+        return this.macStyle & 0B10;
+    }
+
+    get is_underline () {
+        return this.macStyle & 0B100;
+    }
+
+    get is_outline () {
+        return this.macStyle & 0B1000;
+    }
+
+    get is_shadow () {
+        return this.macStyle & 0B10000;
+    }
+
+    get is_condensed () {
+        return this.macStyle & 0B100000;
+    }
+
+    get is_exteded () {
+        return this.macStyle & 0B1000000;
+    }
+}
+
+class glyf extends sfnt {
+    parser() {
+        this.numberOfContours = this.stream.getInt16();
+        this.xMin = this.stream.getInt16();
+        this.yMin = this.stream.getInt16();
+        this.xMax = this.stream.getInt16();
+        this.yMax = this.stream.getInt16();
+
+        this.glyphs = [];
+        if ( this.numberOfContours > 0 ) {
+            try {
+                var _t = {};
+                _t.endPtsOfContours = this.stream.getUint16Array( this.numberOfContours );
+                _t.instructionLength = this.stream.getUint16();
+                _t.instructions = this.stream.getUint8Array( _t.instructionLength );
+
+                var _lenght = _t.endPtsOfContours[ _t.endPtsOfContours.length - 1 ] + 1;
+                _t.flags = [];
+
+                while ( _t.flags.length < _length ) {
+                    var _f = this.stream.getUint16();
+                    _t.flags.push( _f );
+                    if ( flag & 0B1000 ) {
+                        var _rl = this.stream.getUint8();
+                        while( _rl-- ) {
+                            _t.flags.push( _f );
+                        }
+                    }
+                }
+                // todo;
+
+                _t.coordinates = [];
+                for ( let i = 0; i < _length; i++ ) {
+                    var _c = {};
+                    _c.onCurve = _t.flags[i] & 0B1;
+                    _c.xShort = _t.flags[i] & 0B10;
+                    _c.yShort = _t.flags[i] & 0B100;
+                }
+
+                this.glyphs.push( _t );
+            } catch ( e ) {
+                console.log( e );
+            }
+        }
 
         console.log( this );
     }
@@ -317,12 +418,21 @@ class Fonts {
         return this.stream.slice( start, start + long );
     }
 
-    _parser_cmap () {
-        var cmap_stream = this._get_sfnt( "cmap" );
-        this.cmap = new cmap( cmap_stream );
+    _parser () {
+        if ( this.meta[ "cmap" ] ) {
+            var cmap_stream = this._get_sfnt( "cmap" );
+            this.cmap = new cmap( cmap_stream );
+        }
 
-        var head_stream = this._get_sfnt( "head" );
-        this.head = new head( head_stream );
+        if ( this.meta[ "head" ] ) {
+            var head_stream = this._get_sfnt( "head" );
+            this.head = new head( head_stream );
+        }
+
+        if ( this.meta[ "glyf" ] ) {
+            var glyf_stream = this._get_sfnt( "glyf" );
+            this.glyf = new glyf( glyf_stream );
+        }
     }
 
     parser () {
@@ -336,32 +446,22 @@ class Fonts {
 
         this.meta = {};
 
-        var _label;
-        var _label_list = Fonts.table_name();
+        for ( let i = 0; i < this._offset_subtable.numTables; i++ ) {
+            var label = this.stream.getChar4(),
+                checkSum = this.stream.getUint32(),
+                offset = this.stream.getUint32(),
+                length = this.stream.getUint32();
 
-        do {
-            _label = this.stream.getChar4();
-            if ( -1 !== _label_list.indexOf( _label ) ) {
-                var checkSum = this.stream.getUint32(),
-                    offset = this.stream.getUint32(),
-                    length = this.stream.getUint32();
-
-                this.meta[ _label ] = {
-                    tag : _label,
-                    checkSum : checkSum,
-                    offset : offset,
-                    length : length,
-                }
-            } else {
-                this.stream.putUint32();
-                break;
+            this.meta[ label ] = {
+                tag : label,
+                checkSum : checkSum,
+                offset : offset,
+                length : length,
             }
-        } while ( 1 );
+        }
 
         console.log( this.meta )
 
-        if ( this.meta[ "cmap" ] ) {
-            this._parser_cmap();
-        }
+        this._parser();
     }
 }
