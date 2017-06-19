@@ -31,6 +31,12 @@ class stream {
         return _t;
     }
 
+    getUint8() {
+        var _t = this.__reader.getUint8( this.__pointer );
+        this.__pointer++;
+        return _t;
+    }
+
     getFixed32() {
         var _t = this.__reader.getUint32( this.__pointer, false );
         _t = ( _t >> 16 ) + ( _t & 0xFFFF ) / 0x10000;
@@ -86,6 +92,10 @@ class stream {
             _t[i] = this.__reader.getUint16( this.__pointer, false );
         }
         return _t;
+    }
+
+    get isEnd () {
+        return this.__pointer >= this.__buffer.byteLength;
     }
 
     slice ( begin, end ) {
@@ -308,47 +318,74 @@ class head extends sfnt {
 
 class glyf extends sfnt {
     parser() {
-        this.numberOfContours = this.stream.getInt16();
-        this.xMin = this.stream.getInt16();
-        this.yMin = this.stream.getInt16();
-        this.xMax = this.stream.getInt16();
-        this.yMax = this.stream.getInt16();
-
         this.glyphs = [];
-        if ( this.numberOfContours > 0 ) {
-            try {
-                var _t = {};
-                _t.endPtsOfContours = this.stream.getUint16Array( this.numberOfContours );
+
+        while( ! this.stream.isEnd ) {
+            var _t = {};
+            _t.numberOfContours = this.stream.getInt16();
+            _t.xMin = this.stream.getInt16();
+            _t.yMin = this.stream.getInt16();
+            _t.xMax = this.stream.getInt16();
+            _t.yMax = this.stream.getInt16();
+
+            if ( _t.numberOfContours > 0 ) {
+                _t.endPtsOfContours = this.stream.getUint16Array( _t.numberOfContours );
                 _t.instructionLength = this.stream.getUint16();
                 _t.instructions = this.stream.getUint8Array( _t.instructionLength );
 
-                var _lenght = _t.endPtsOfContours[ _t.endPtsOfContours.length - 1 ] + 1;
+                var _length = _t.endPtsOfContours[ _t.endPtsOfContours.length - 1 ] + 1;
                 _t.flags = [];
 
                 while ( _t.flags.length < _length ) {
-                    var _f = this.stream.getUint16();
+                    var _f = this.stream.getUint8();
                     _t.flags.push( _f );
-                    if ( flag & 0B1000 ) {
+                    if ( _f & 0B1000 ) {
                         var _rl = this.stream.getUint8();
                         while( _rl-- ) {
                             _t.flags.push( _f );
                         }
                     }
                 }
-                // todo;
 
-                _t.coordinates = [];
+                _t.xCoordinates = [];
+                _t.yCoordinates = [];
+                _t.xAbsolutes = [];
+                _t.yAbsolutes = [];
                 for ( let i = 0; i < _length; i++ ) {
-                    var _c = {};
-                    _c.onCurve = _t.flags[i] & 0B1;
-                    _c.xShort = _t.flags[i] & 0B10;
-                    _c.yShort = _t.flags[i] & 0B100;
+                    if ( _t.flags[i] & 0B10 ) {
+                        var _offset = this.stream.getUint8() * ( ( _t.flags[i] & 0B10000 ) ? 1 : -1 );
+                        _t.xCoordinates.push( _offset );
+                        _t.xAbsolutes.push( i ? _offset + _t.xAbsolutes[ i - 1 ] : _offset );
+                    } else {
+                        if ( _t.flags[i] & 0B10000 ) {
+                            _t.xCoordinates.push( 0 );
+                            _t.xAbsolutes.push( i ? _t.xAbsolutes[ i - 1 ] : 0 );
+                        } else {
+                            var _offset = this.stream.getInt16();
+                            _t.xCoordinates.push( _offset );
+                            _t.xAbsolutes.push( i ? _offset + _t.xAbsolutes[ i - 1 ] : _offset );
+                        }
+                    }
                 }
-
-                this.glyphs.push( _t );
-            } catch ( e ) {
-                console.log( e );
+                for ( let i = 0; i < _length; i++ ) {
+                    if ( _t.flags[i] & 0B100 ) {
+                        var _offset = this.stream.getUint8() * ( ( _t.flags[i] & 0B100000 ) ? 1 : -1 );
+                        _t.yCoordinates.push( _offset );
+                        _t.yAbsolutes.push( i ? _offset + _t.yAbsolutes[ i - 1 ] : _offset );
+                    } else {
+                        if ( _t.flags[i] & 0B100000 ) {
+                            _t.yCoordinates.push( 0 );
+                            _t.yAbsolutes.push( i ? _t.yAbsolutes[ i - 1 ] : 0 );
+                        } else {
+                            var _offset = this.stream.getInt16();
+                            _t.yCoordinates.push( _offset );
+                            _t.yAbsolutes.push( i ? _offset + _t.yAbsolutes[ i - 1 ] : _offset );
+                        }
+                    }
+                }
             }
+            console.log( _t );
+            this.glyphs.push( _t );
         }
 
         console.log( this );
