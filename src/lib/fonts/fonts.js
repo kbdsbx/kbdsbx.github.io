@@ -98,6 +98,10 @@ class stream {
         return this.__pointer >= this.__buffer.byteLength;
     }
 
+    set pointer ( val ) {
+        this.__pointer = val;
+    }
+
     slice ( begin, end ) {
         var _buff = this.__buffer.slice( begin, end );
         return new stream( _buff );
@@ -105,9 +109,9 @@ class stream {
 }
 
 class sfnt {
-    constructor ( stm ) {
+    constructor ( stm, params ) {
         this.stream = stm;
-        this.parser();
+        this.parser( params );
     }
 }
 
@@ -316,11 +320,58 @@ class head extends sfnt {
     }
 }
 
+class maxp extends sfnt {
+    parser () {
+        this.version = this.stream.getFixed32();
+        if ( this.version === 0.5 ) {
+            this.numGlyphs = this.stream.getUint16();
+        }
+        if ( this.version === 1.0 ) {
+            this.numGlyphs = this.stream.getUint16();
+            this.maxPoints = this.stream.getUint16();
+            this.maxContours = this.stream.getUint16();
+            this.maxCompositePoints = this.stream.getUint16();
+            this.maxCompositeContours = this.stream.getUint16();
+            this.maxZones = this.stream.getUint16();
+            this.maxTwilightPoints = this.stream.getUint16();
+            this.maxStorage = this.stream.getUint16();
+            this.maxFunctionDefs = this.stream.getUint16();
+            this.maxInstructionDefs = this.stream.getUint16();
+            this.maxStackElements = this.stream.getUint16();
+            this.maxSizeOfInstructions = this.stream.getUint16();
+            this.maxComponentElements = this.stream.getUint16();
+            this.maxComponentDepth = this.stream.getUint16();
+        }
+
+        console.log( this );
+    }
+}
+
+class loca extends sfnt {
+    parser ( args ) {
+        this.offsets = [];
+        let i = args.numGlyphs + 1;
+        if ( ! args.indexToLocFormat ) {
+            while( i-- ) {
+                this.offsets.push( this.stream.getUint16() );
+            }
+        } else {
+            while( i-- ) {
+                this.offsets.push( this.stream.getUint32() );
+            }
+        }
+
+        console.log( this );
+    }
+}
+
 class glyf extends sfnt {
-    parser() {
+    parser( args ) {
         this.glyphs = [];
 
-        while( ! this.stream.isEnd ) {
+        for ( let _idx = 0; _idx < ( args.offsets.length - 1 ); _idx++ ) {
+            this.stream.pointer = args.offsets[_idx];
+
             var _t = {};
             _t.numberOfContours = this.stream.getInt16();
             _t.xMin = this.stream.getInt16();
@@ -384,7 +435,7 @@ class glyf extends sfnt {
                     }
                 }
             }
-            console.log( _t );
+
             this.glyphs.push( _t );
         }
 
@@ -466,9 +517,24 @@ class Fonts {
             this.head = new head( head_stream );
         }
 
+        if ( this.meta[ "maxp" ] ) {
+            var maxp_stream = this._get_sfnt( "maxp" );
+            this.maxp = new maxp( maxp_stream );
+        }
+
+        if ( this.meta[ "loca" ] ) {
+            var loca_stream = this._get_sfnt( "loca" );
+            this.loca = new loca( loca_stream, {
+                indexToLocFormat : this.head.indexToLocFormat,
+                numGlyphs : this.maxp.numGlyphs,
+            } );
+        }
+
         if ( this.meta[ "glyf" ] ) {
             var glyf_stream = this._get_sfnt( "glyf" );
-            this.glyf = new glyf( glyf_stream );
+            this.glyf = new glyf( glyf_stream, {
+                offsets : this.loca.offsets,
+            } );
         }
     }
 
