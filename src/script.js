@@ -17,7 +17,7 @@ require.config({
     }
 })
 
-var $, consoles, c2, c3;
+var $, consoles, c2, c3, c4;
 require( [ "jquery", "consoles" ], function( _jquery, _consoles ) {
     $ = _jquery;
 
@@ -362,4 +362,27 @@ require( [ "jquery", "consoles" ], function( _jquery, _consoles ) {
         } )
         */
     } );
+
+    c4 = new _consoles( $( '#test-4 .consoles' ).get(0) );
+    $( '#test-4' ).on( 'load', function() {
+        c4.log( `test 04 [animation] init.` );
+
+        require( [ './lib/animation/animation.js' ], function() {
+            c4.log( `library of animation.js loaded.` );
+            var ani = new animation( 'animation-canvas' );
+            ani.width = 750;
+            ani.height = 450;
+
+            var x = 0;
+
+            ani.loop = function( ctx ) {
+                ctx.context.clearRect( 0, 0, 750, 450 );
+                ctx.context.fillStyle = "green";
+                ctx.context.fillRect( x, 200, 50, 50 );
+                x++;
+                console.log( ctx.timestamp );
+            }
+            ani.run();
+        } )
+    } )
 } );
