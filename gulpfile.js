@@ -5,6 +5,7 @@ var htmlreplace = require( 'gulp-html-replace' );
 var less = require( 'gulp-less' );
 var minifycss = require( 'gulp-csso' );
 var clean = require( 'gulp-clean' );
+var notify = require( 'gulp-notify' );
 
 gulp.task( 'clean', function() {
     gulp.src( '**/*.*~', { read : false } )
@@ -21,15 +22,29 @@ gulp.task( 'lib', function() {
 } );
 
 gulp.task( 'default', [ 'clean', 'lib' ], function() {
+    var i = 0;
+
+    var end = function() {
+        i++;
+        if ( i == 8 ) {
+            gulp.src( 'src/index.html', { read : false } )
+                .pipe( notify( 'Build successful.' ) );
+        }
+    }
+
     gulp.src( 'src/lib/**/*' )
-        .pipe( gulp.dest( 'lib/' ) );
+        .pipe( gulp.dest( 'lib/' ) )
+        .on( 'end', end );
     gulp.src( 'src/images/**/*' )
-        .pipe( gulp.dest( 'images/' ) );
+        .pipe( gulp.dest( 'images/' ) )
+        .on( 'end', end );
     gulp.src( 'src/data/**/*' )
-        .pipe( gulp.dest( 'data/' ) );
+        .pipe( gulp.dest( 'data/' ) )
+        .on( 'end', end );
 
     gulp.src( 'src/tests/**/*' )
-        .pipe( gulp.dest( 'tests/' ) );
+        .pipe( gulp.dest( 'tests/' ) )
+        .on( 'end', end );
 
     gulp.src( 'src/*.html' )
         .pipe( htmlreplace( {
@@ -42,15 +57,19 @@ gulp.task( 'default', [ 'clean', 'lib' ], function() {
                 tpl: '<link rel="stylesheet" data-form="%s" type="text/css" href="style.css">',
             }
         } ) )
-        .pipe( gulp.dest( './' ) );
+        .pipe( gulp.dest( './' ) )
+        .on( 'end', end );
 
     gulp.src( 'src/style.less' )
         .pipe( less() )
         .pipe( minifycss() )
-        .pipe( gulp.dest( './' ) );
+        .pipe( gulp.dest( './' ) )
+        .on( 'end', end );
 
     gulp.src( 'src/*.ico' )
-        .pipe( gulp.dest( './' ) );
+        .pipe( gulp.dest( './' ) )
+        .on( 'end', end );
     gulp.src( 'src/*.js' )
-        .pipe( gulp.dest( './' ) );
+        .pipe( gulp.dest( './' ) )
+        .on( 'end', end );
 } );

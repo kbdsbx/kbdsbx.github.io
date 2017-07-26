@@ -17,7 +17,7 @@ require.config({
     }
 })
 
-var $, consoles, c2, c3;
+var $, consoles, c2, c3, c4;
 require( [ "jquery", "consoles" ], function( _jquery, _consoles ) {
     $ = _jquery;
 
@@ -362,4 +362,75 @@ require( [ "jquery", "consoles" ], function( _jquery, _consoles ) {
         } )
         */
     } );
+
+    c4 = new _consoles( $( '#test-4 .consoles' ).get(0) );
+    $( '#test-4' ).on( 'load', function() {
+        c4.log( `test 04 [animation] init.` );
+
+        require( [ './lib/animation/animation.js' ], function() {
+            c4.log( `library of animation.js loaded.` );
+            var ani = new animation( 'animation-canvas' );
+            ani.fps = 60;
+            ani.width = 750;
+            ani.height = 450;
+
+            $( '.animation-parse' ).on( 'click', function() {
+                ani.stop();
+            } );
+            $( '.animation-run' ).on( 'click', function() {
+                ani.run();
+            } );
+            $( '.jump-ball' ).on( 'click', function() {
+                var x = 0, xp = 1, xt = 6;
+                var y = 0, yp = 1, yt = 6;
+
+                var _his = [];
+
+                ani.stop();
+                ani.loop = function( ctx ) {
+                    var _c = ctx.context;
+                    _c.clearRect( 0, 0, 750, 450 );
+                    _c.fillStyle = "black";
+                    _c.fillText( `FPS: ${ani.fps}`, 10, 10 );
+                    /*
+                    _c.fillStyle = "green";
+                    _c.beginPath();
+                    _c.arc( x, y, 10, 0, 2 * Math.PI, true );
+                    _c.fill();
+                    */
+                    x += xt * xp;
+                    y += yt * yp;
+                    if ( x > 750 ) {
+                        xp = -1;
+                        xt = Math.floor( Math.random() * 5 ) + 3;
+                    }
+                    if ( x < 0 ) {
+                        xp = 1;
+                        xt = Math.floor( Math.random() * 5 ) + 3;
+                    }
+                    if ( y > 450 ) {
+                        yp = -1;
+                        yt = Math.floor( Math.random() * 5 ) + 3;
+                    }
+                    if ( y < 0 ) {
+                        yp = 1;
+                        yt = Math.floor( Math.random() * 5 ) + 3;
+                    }
+
+                    if ( _his.length >= 20 ) {
+                        _his.pop();
+                    }
+                    _his.unshift( [ x, y ] );
+
+                    for ( var i = 0; i < _his.length; i++ ) {
+                        _c.fillStyle = "rgba( 0, 0, 255, " + ( 1 - ( 1.0 / _his.length ) * i ) + ")";
+                        _c.beginPath();
+                        _c.arc( _his[i][0], _his[i][1], 10, 0, 2 * Math.PI, true );
+                        _c.fill();
+                    }
+                }
+                ani.run();
+            } );
+        } )
+    } )
 } );
