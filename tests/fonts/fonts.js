@@ -1,33 +1,16 @@
+"use strict"
 
-class Fonts {
-    constructor ( path, callback ) {
-        var _self = this;
-        this.path = path;
+importScripts( "../../lib/fonts/fonts.js" );
 
-        var xhr = new XMLHttpRequest();
-        var rdr = new FileReader();
-
-        rdr.onloadend = function( val ) {
-            var u16 = new Uint16Array( val.target.result );
-            console.log( u16 );
-        }
-
-        xhr.onreadystatechange = function() {
-            if ( xhr.readyState === 4 && xhr.status === 200 ) {
-                var b = xhr.response;
-                var pt = b.slice( 0, 18 );
-                rdr.readAsArrayBuffer( pt );
-                /*
-                if ( callback ) {
-                    callback.call( this, response_data );
-                }
-                */
-            }
-        }
-
-        xhr.open( 'GET', path );
-        xhr.overrideMimeType( "text/plain; charset=x-user-defined" );
-        xhr.responseType = "blob";
-        xhr.send( null );
-    }
-}
+// cmap 2 4 2
+var f = new Fonts( "../../fonts/BahiaScriptSSK.ttf", function( data ) {
+// cmap 4
+// var f = new Fonts( "../../fonts/我字酷默陌写意水墨体.ttf", function( data ) {
+// cmap 4 6 4
+// var f = new Fonts( "../../fonts/Switzerl.ttf", function( data ) {
+// cmap 4 4 12
+// var f = new Fonts( "../../fonts/msyh.ttf", function( data ) {
+// cmap 4 12 6 4 12
+// var f = new Fonts( "../../fonts/NotoSansHans-Black.otf", function( data ) {
+// var f = new Fonts( "../../fonts/NotoSansHans-Bold.otf", function( data ) {
+} );
