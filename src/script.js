@@ -431,6 +431,113 @@ require( [ "jquery", "consoles" ], function( _jquery, _consoles ) {
                 }
                 ani.run();
             } );
+
+            $( '.ease-transition' ).on( 'click', function() {
+                var _coos = [], _curr = 0;
+                var _temp = [], _temp_step = [], _temp_curr = 0, _temp_frames = 180;
+                var _stop = 0, _stop_frames = 180;
+
+                // y = x
+                _coos.push( [] );
+                for ( var i = -50; i < 50; i++ ) {
+                    _coos[_coos.length - 1].push( { x : i * .125, y : i * .125 } );
+                }
+                // y = sin(x)
+                _coos.push( [] );
+                for ( var i = -50; i < 50; i++ ) {
+                    _coos[_coos.length - 1].push( { x : i * .125, y : Math.sin( i * .125 ) } );
+                }
+                // y = cos(x)
+                _coos.push( [] );
+                for ( var i = -50; i < 50; i++ ) {
+                    _coos[_coos.length - 1].push( { x : i * .125, y : Math.cos( i * .125 ) } )
+                }
+                // y = tan(x)
+                _coos.push( [] );
+                for ( var i = -50; i < 50; i++ ) {
+                    _coos[_coos.length - 1].push( { x : i * .125, y : Math.tan( i * .125 ) } )
+                }
+                // y = e^(x)
+                _coos.push( [] );
+                for ( var i = -50; i < 50; i++ ) {
+                    _coos[_coos.length - 1].push( { x : i * .125, y : Math.exp( i * .125 ) } )
+                }
+                // y = x ^ 2
+                _coos.push( [] );
+                for ( var i = -50; i < 50; i++ ) {
+                    _coos[_coos.length - 1].push( { x : i * .125, y : Math.pow( i * .125, 2 ) } )
+                }
+                // y = x ^ 3
+                _coos.push( [] );
+                for ( var i = -50; i < 50; i++ ) {
+                    _coos[_coos.length - 1].push( { x : i * .125, y : Math.pow( i * .125, 3 ) } )
+                }
+                // y = x ^ -1
+                _coos.push( [] );
+                for ( var i = -50; i < 50; i++ ) {
+                    _coos[_coos.length - 1].push( { x : i * .125, y : Math.pow( i * .125, -1 ) } )
+                }
+
+                var _labels = [ `y = x`, `y = sin( x )`, `y = cos( x )`, `y = tan( x )`, `y = e ^ x`, `y = x ^ 2`, `y = x ^ 3`, `y = x ^ -1` ];
+
+                ani.stop();
+                ani.loop = function( args ) {
+                    var _c = args.context;
+                    _c.clearRect( 0, 0, 750, 450 );
+                    _c.fillStyle = "black";
+                    _c.fillText( `FPS: ${ani.fps}`, 10, 10 );
+                    _c.fillText( _labels[_curr] , 10, 30 );
+
+                    var _u = function() {
+                        return _curr;
+                    }
+                    var _n = function() {
+                        return ( _curr + 1 ) == _coos.length ? 0 : _curr + 1;
+                    }
+                    var _p = function() {
+                        return ( _curr - 1 ) == 0 ? _coos.length - 1 : _curr - 1;
+                    }
+
+                    if ( ! _stop ) {
+                        if ( ! _temp_curr ) {
+                            var _nv = _n();
+                            var _cv = _u();
+                            _temp = [];
+                            _temp_step = [];
+                            for ( var i = 0; i < 100; i++ ) {
+                                _temp.push( { x : _coos[_cv][i].x, y : _coos[_cv][i].y } );
+                            }
+                            for ( var i = 0; i < 100; i++ ) {
+                                _temp_step.push( { x : ( _coos[_nv][i].x - _coos[_cv][i].x ) * 1.0 / _temp_frames, y : ( _coos[_nv][i].y - _coos[_cv][i].y ) * 1.0 / _temp_frames } );
+                            }
+                            _temp_curr++;
+                        } else {
+                            if ( _temp_curr > _temp_frames ) {
+                                _temp_curr = 0;
+                                _curr = _n();
+                                _stop = _stop_frames;
+                            } else {
+                                for ( var i = 0; i < 100; i++ ) {
+                                    _temp[i].x += _temp_step[i].x;
+                                    _temp[i].y += _temp_step[i].y;
+                                }
+                                _temp_curr++;
+                            }
+                        }
+                    } else {
+                        _stop--;
+                    }
+
+                    _c.fillStyle = "#0093ff";
+                    for ( var i = 0; i < 100; i++ ) {
+                        _c.beginPath();
+                        _c.arc( _temp[i].x * 8 * 7.5 + 375, _temp[i].y * 8 * 7.5 * -1 + 225, 5, 0, 2 * Math.PI, true );
+                        _c.fill();
+                    }
+                }
+
+                ani.run();
+            } );
         } )
     } )
 } );

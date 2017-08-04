@@ -18,14 +18,14 @@ class animation {
         this._fps = 60;
         this._fid = 0;
 
-        this._animation_frame = function( func ) {
+        this._animation_frame = function() {
             if ( window ) {
                 window.requestAnimationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame;
 
                 var _request_func = function( timestamp ) {
                     _this._pass += ( timestamp - _this._prev_timestamp );
                     if ( ( _this._pass - _this._frame ) > -1 ) {
-                        func.call( _this, {
+                        _this._loop.call( _this, {
                             timestamp : timestamp,
                             pass : _this._pass,
                             context : _this.$context,
@@ -111,7 +111,7 @@ class animation {
     }
 
     run() {
-        this._animation_frame( this._loop );
+        this._animation_frame();
 
         return this;
     }
