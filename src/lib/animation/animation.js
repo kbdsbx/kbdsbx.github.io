@@ -113,32 +113,47 @@ class animation {
     run() {
         this._animation_frame();
 
+        this.trigger( 'run' );
+
         return this;
     }
 
     stop() {
         this._cancel_frame();
 
+        this.trigger( 'stop' );
+
         return this;
     }
 
-    bind ( evt, handle ) {
+    on ( evt, handle ) {
         let _this = this;
 
         if ( ! _this._events[evt] ) {
             _this._events[evt] = [];
-
-            let _tfunc = ( e ) => {
-                for ( let idx in _this._events[evt] ) {
-                    _this._events[evt][idx].call( _this, e );
-                }
-            };
-            
-            eval( evt + "=" + _tfunc.toString() );
         }
 
         _this._events[evt].push( handle );
 
+        return this;
+    }
+
+    trigger ( evt ) {
+        let _this = this;
+        if ( _this._events[evt] ) {
+            for ( let i = 0; i < _this._events[evt].length; i++ ) {
+                _this._events[evt][i].call( _this, Array.prototype.slice.call( arguments, 1 ) );
+            }
+        }
+        return this;
+    }
+
+    off ( evt ) {
+        let _this = this;
+
+        if ( _this._events[evt] ) {
+            delete _this._events[evt];
+        }
         return this;
     }
 }

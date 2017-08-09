@@ -538,6 +538,98 @@ require( [ "jquery", "consoles" ], function( _jquery, _consoles ) {
 
                 ani.run();
             } );
+
+            $( '.clock' ).on( 'click', function() {
+                var _stack = [];
+
+                ani.off( 'run' ).on( 'run', function() {
+                    _stack = [];
+                } )
+
+                ani.stop();
+                ani.loop = function( args ) {
+                    var _c = args.context;
+                    _c.clearRect( 0, 0, 750, 450 );
+                    _c.fillStyle = "black";
+                    _c.font = "12px";
+                    _c.fillText( `FPS: ${ani.fps}`, 10, 10 );
+
+                    _c.strokeStyle = "rgb( 227, 227, 227 )";
+                    _c.beginPath();
+                    _c.arc( 375, 225, 206, 0, 2 * Math.PI, true );
+                    _c.stroke();
+                    _c.beginPath();
+                    _c.arc( 375, 225, 194, 0, 2 * Math.PI, true );
+                    _c.stroke();
+
+                    _c.beginPath();
+                    _c.arc( 375, 225, 168, 0, 2 * Math.PI, true );
+                    _c.stroke();
+                    _c.beginPath();
+                    _c.arc( 375, 225, 156, 0, 2 * Math.PI, true );
+                    _c.stroke();
+
+                    _c.beginPath();
+                    _c.arc( 375, 225, 130, 0, 2 * Math.PI, true );
+                    _c.stroke();
+                    _c.beginPath();
+                    _c.arc( 375, 225, 118, 0, 2 * Math.PI, true );
+                    _c.stroke();
+
+                    var _r1 = 200, _r2 = 162, _r3 = 124;
+
+                    var _n = new Date();
+                    var _h = _n.getHours(), _m = _n.getMinutes(), _s = _n.getSeconds(), _ms = _n.valueOf() % 1000;
+                    var _hour = _h % 12 + _m * .0166666667 + _s * .0002777778;
+                    var _minute = _m + _s * .0166666667 + _ms * .0000166667;
+                    var _second = _s + _ms * .001;
+
+                    var _hour_arc = _hour / 12.0 * 2 * Math.PI;
+                    var _hour_x = _r1 * Math.sin( _hour_arc );
+                    var _hour_y = _r1 * Math.cos( _hour_arc );
+
+                    var _minute_arc = _minute / 60.0 * 2 * Math.PI;
+                    var _minute_x = _r2 * Math.sin( _minute_arc );
+                    var _minute_y = _r2 * Math.cos( _minute_arc );
+
+                    var _second_arc = _second / 60.0 * 2 * Math.PI;
+                    var _second_x = _r3 * Math.sin( _second_arc );
+                    var _second_y = _r3 * Math.cos( _second_arc );
+
+                    if ( _stack.length > 300 ) {
+                        _stack.pop();
+                    }
+                    _stack.unshift( {
+                        second_x : _second_x,
+                        second_y : _second_y,
+                    } );
+
+                    for ( var i = 0; i < _stack.length; i++ ) {
+                        // _c.arc( _second_x + 375, _second_y + 225, 5, 0, 2 * Math.PI, true );
+                        _c.fillStyle = `rgb( ${Math.floor(i * .85)}, ${174 + Math.floor(i * .36)}, 255 )`;
+                        _c.beginPath();
+                        _c.arc( _stack[i].second_x + 375, -_stack[i].second_y + 225, 5, 0, 2 * Math.PI, true );
+                        _c.fill();
+                    }
+                    
+                    _c.fillStyle = "rgb( 0, 73, 128 )";
+                    _c.beginPath();
+                    _c.arc( _minute_x + 375, -_minute_y + 225, 10, 0, 2 * Math.PI, true );
+                    _c.fill();
+                    _c.fillStyle = "#fff";
+                    _c.font = "8px";
+                    _c.fillText( Math.floor( _minute ), _minute_x + 375 - 4 - ( _minute >= 10 ? 4 : 0 ), -_minute_y + 225 + 4 );
+
+                    _c.fillStyle = "rgb( 0, 36, 64 )";
+                    _c.beginPath();
+                    _c.arc( _hour_x + 375, -_hour_y + 225, 12, 0, 2 * Math.PI, true );
+                    _c.fill();
+                    _c.fillStyle = "#fff";
+                    _c.font = "8px";
+                    _c.fillText( Math.floor( _hour ), _hour_x + 375 - 4 - ( _hour >= 10 ? 4 : 0 ), -_hour_y + 225 + 5 );
+                }
+                ani.run();
+            } )
         } )
     } )
 } );
