@@ -148,8 +148,21 @@ class cmap extends sfnt {
         return _vals;
     }
 
-    parser () {
+    char ( c ) {
+        let _switch = {
+            0 : function( c ) {
+            },
+        }
+    }
+
+    parser ( argv ) {
         var _self = this;
+
+        var _curr_platform_id = argv.platform_id;
+        var _curr_encoding_id = argv.encoding_id;
+
+        console.log( 'platform_id : ' + _curr_platform_id );
+        console.log( 'encoding_id : ' + _curr_encoding_id );
 
         this.version = this.stream.getUint16();
         this.numberSubtables = this.stream.getUint16();
@@ -159,7 +172,7 @@ class cmap extends sfnt {
         for ( let i = 0; i < this.numberSubtables; i++ ) {
             var _enc = {};
             _enc.platformID = this.stream.getUint16();
-            _enc.platformSpecificID = this.stream.getUint16();
+            _enc.encodingID = this.stream.getUint16();
             _enc.offset = this.stream.getUint32();
 
             this.encodingTables.push( _enc );
@@ -444,8 +457,13 @@ class glyf extends sfnt {
 }
 
 class Fonts {
-    constructor ( path, callback ) {
+    constructor ( path, params, callback ) {
         var _self = this;
+
+        this.params = params;
+        this.params.platform_id = Fonts.get_platform_id( params.platform );
+        this.params.encoding_id = Fonts.get_encoding_id( params.encoding );
+
         this.__pointer = 0;
         this._offset_subtable = {
             scaler_type : 0,
@@ -506,10 +524,50 @@ class Fonts {
         return this.stream.slice( start, start + long );
     }
 
+    static get_platform_id ( name ) {
+        switch( name.toUpperCase() ) {
+        case "WIN32":
+        case "WINDOWS":
+            return 3;
+        case "MAC68K":
+        case "MACPPC":
+        case "MACINTOSh":
+        case "MACINTEl":
+            return 1;
+        default :
+            return 0;
+        }
+    }
+
+    static get_encoding_id ( name ) {
+        switch( name.toUpperCase() ) {
+        default : 
+            return 0;
+        case "UNICODE":
+        case "UTF-8":
+        case "UTF-16":
+        case "UTF-32":
+            return 1;
+        case "SHIFTJIS":
+            return 2;
+        case "PRC":
+            return 3;
+        case "BIG5":
+            return 4;
+        case "WANSUNG":
+            return 5;
+        case "JOHAB":
+            return 6;
+        }
+    }
+
     _parser () {
         if ( this.meta[ "cmap" ] ) {
             var cmap_stream = this._get_sfnt( "cmap" );
-            this.cmap = new cmap( cmap_stream );
+            this.cmap = new cmap( cmap_stream, {
+                platform_id : this.params.platform_id,
+                encoding_id : this.params.encoding_id,
+            } );
         }
 
         if ( this.meta[ "head" ] ) {

@@ -556,25 +556,41 @@ require( [ "jquery", "consoles" ], function( _jquery, _consoles ) {
 
                     _c.strokeStyle = "rgb( 227, 227, 227 )";
                     _c.beginPath();
+                    _c.arc( 375, 225, 200, 0, 2 * Math.PI, true );
+                    _c.stroke();
+                    /*
+                    _c.beginPath();
                     _c.arc( 375, 225, 206, 0, 2 * Math.PI, true );
                     _c.stroke();
                     _c.beginPath();
                     _c.arc( 375, 225, 194, 0, 2 * Math.PI, true );
                     _c.stroke();
+                    */
 
+                    _c.beginPath();
+                    _c.arc( 375, 225, 162, 0, 2 * Math.PI, true );
+                    _c.stroke();
+
+                    /*
                     _c.beginPath();
                     _c.arc( 375, 225, 168, 0, 2 * Math.PI, true );
                     _c.stroke();
                     _c.beginPath();
                     _c.arc( 375, 225, 156, 0, 2 * Math.PI, true );
                     _c.stroke();
+                    */
 
+                    _c.beginPath();
+                    _c.arc( 375, 225, 124, 0, 2 * Math.PI, true );
+                    _c.stroke();
+                    /*
                     _c.beginPath();
                     _c.arc( 375, 225, 130, 0, 2 * Math.PI, true );
                     _c.stroke();
                     _c.beginPath();
                     _c.arc( 375, 225, 118, 0, 2 * Math.PI, true );
                     _c.stroke();
+                    */
 
                     var _r1 = 200, _r2 = 162, _r3 = 124;
 
@@ -608,7 +624,7 @@ require( [ "jquery", "consoles" ], function( _jquery, _consoles ) {
                         // _c.arc( _second_x + 375, _second_y + 225, 5, 0, 2 * Math.PI, true );
                         _c.fillStyle = `rgb( ${Math.floor(i * .85)}, ${174 + Math.floor(i * .36)}, 255 )`;
                         _c.beginPath();
-                        _c.arc( _stack[i].second_x + 375, -_stack[i].second_y + 225, 5, 0, 2 * Math.PI, true );
+                        _c.arc( _stack[i].second_x + 375, -_stack[i].second_y + 225, ( 5 - Math.min( 4.99, i * 0.016667 ) ), 0, 2 * Math.PI, true );
                         _c.fill();
                     }
                     
