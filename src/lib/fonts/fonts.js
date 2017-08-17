@@ -148,10 +148,39 @@ class cmap extends sfnt {
         return _vals;
     }
 
-    char ( c ) {
+    glyphID( code ) {
+        var _this = this;
         let _switch = {
-            0 : function( c ) {
+            0 : function( code ) {
             },
+            4 : function ( code ) {
+                var startCode = _this.curr_format.startCode;
+                var endCode = _this.curr_format.endCode;
+                var idRangeOffset = _this.curr_format.idRangeOffset;
+                var idDelta = _this.curr_format.idDelta;
+                var glyphIndexArray = _this.curr_format.glyphIndexArray;
+                var idx = 0;
+                for ( ; idx < endCode.length; idx++ ) {
+                    if ( endCode[idx] >= code ) {
+                        break;
+                    }
+                }
+                if ( idx > idRangeOffset.length ) {
+                    // do not find.
+                    return -1;
+                }
+                if ( 0 !== idRangeOffset[idx] ) {
+                    return glyphIndexArray[ idRangeOffset[idx] / 2 + ( code - startCode[idx] ) - ( idRangeOffset.length - idx ) ];
+                } else {
+                    return glyphIndexArray[ idDelta[idx] + code ];
+                }
+            }
+        }
+
+        if ( 0 !== this.curr_format ) {
+            return _switch[this.curr_format.format]( code );
+        } else {
+            return false;
         }
     }
 
@@ -160,9 +189,6 @@ class cmap extends sfnt {
 
         var _curr_platform_id = argv.platform_id;
         var _curr_encoding_id = argv.encoding_id;
-
-        console.log( 'platform_id : ' + _curr_platform_id );
-        console.log( 'encoding_id : ' + _curr_encoding_id );
 
         this.version = this.stream.getUint16();
         this.numberSubtables = this.stream.getUint16();
@@ -179,6 +205,7 @@ class cmap extends sfnt {
         }
 
         this.formats = [];
+        this.curr_format = 0;
 
         for ( let i = 0; i < this.numberSubtables; i++ ) {
             let _format = {};
@@ -210,9 +237,9 @@ class cmap extends sfnt {
                     _format.searchRange = _self.stream.getUint16();
                     _format.entrySelector = _self.stream.getUint16();
                     _format.rangeShift = _self.stream.getUint16();
-                    _format.endCount = _self.stream.getUint16Array( _segCount );
+                    _format.endCode = _self.stream.getUint16Array( _segCount );
                     _format.reservedPad = _self.stream.getUint16();
-                    _format.startCount = _self.stream.getUint16Array( _segCount );
+                    _format.startCode = _self.stream.getUint16Array( _segCount );
                     _format.idDelta = _self.stream.getInt16Array( _segCount );
                     _format.idRangeOffset = _self.stream.getUint16Array( _segCount );
 
@@ -267,6 +294,10 @@ class cmap extends sfnt {
             };
 
             _switch[ _format.format ]();
+
+            if ( _curr_platform_id == this.encodingTables[i].platformID && _curr_encoding_id == this.encodingTables[i].encodingID ) {
+                this.curr_format = _format;
+            }
 
             this.formats.push( _format );
         }
@@ -454,6 +485,10 @@ class glyf extends sfnt {
 
         console.log( this );
     }
+
+    glyph ( glyphID ) {
+        return this.glyphs[glyphID];
+    }
 }
 
 class Fonts {
@@ -484,6 +519,10 @@ class Fonts {
                 _self.stream = new stream( buff );
 
                 _self.parser();
+
+                if ( callback ) {
+                    callback.call( this, {} );
+                }
             }
         }
 
@@ -624,5 +663,15 @@ class Fonts {
         console.log( this.meta )
 
         this._parser();
+    }
+
+    char ( code ) {
+        if ( 'string' === typeof code ) {
+            code = code.charCodeAt();
+        }
+        var glyphID = this.cmap.glyphID( code );
+        console.log( glyphID );
+        var glyph = this.glyf.glyph( glyphID );
+        console.log( glyph );
     }
 }
