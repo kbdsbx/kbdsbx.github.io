@@ -670,8 +670,8 @@ class Fonts {
             code = code.charCodeAt();
         }
         var glyphID = this.cmap.glyphID( code );
-        console.log( glyphID );
         var glyph = this.glyf.glyph( glyphID );
-        console.log( glyph );
+
+        return glyph;
     }
 }

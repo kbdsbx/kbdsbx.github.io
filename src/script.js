@@ -351,6 +351,48 @@ require( [ "jquery", "consoles" ], function( _jquery, _consoles ) {
         require( [ './lib/fonts/fonts.js' ], function() {
             c3.log( `library of fonts.js loaded.` );
             var worker = new Worker( "./tests/fonts/fonts.js" );
+
+            var ctx = $( '#font-canvas' ).get(0).getContext( '2d' );
+
+            let _x = function( ori ) {
+                return ori * .3 + 375;
+            }
+            let _y = function( ori ) {
+                return -( ori * .3 ) + 255;
+            }
+            worker.onmessage = function( e ) {
+                console.log( e.data );
+                var flags = e.data.flags;
+                var xAbs = e.data.xAbsolutes;
+                var yAbs = e.data.yAbsolutes;
+
+                ctx.beginPath();
+                ctx.moveTo( _x( xAbs[0] ), _y ( yAbs[0] ) );
+                for ( let i = 1; i < xAbs.length; i++ ) {
+                    if ( flags[i] & 0x1 ) {
+                        ctx.lineTo( _x( xAbs[i] ), _y ( yAbs[i] ) );
+                    } else {
+                        if ( flags[i + 1] & 0x1 ) {
+                            ctx.bezierCurveTo( _x( xAbs[i] ), _y( yAbs[i] ), _x( xAbs[i] ), _y( yAbs[i] ), _x( xAbs[i + 1] ), _y( yAbs[i + 1] ) );
+                            i++;
+                        } else {
+                            ctx.bezierCurveTo( _x( xAbs[i] ), _y( yAbs[i] ), _x( xAbs[i] ), _y( yAbs[i] ), _x( xAbs[i] + ( xAbs[i + 1] - xAbs[i] ) / 2.0 ), _y( yAbs[i]  + ( yAbs[i + 1] - yAbs[i] ) / 2.0 ) );
+                        }
+                    }
+                }
+                ctx.stroke();
+
+                for ( let i = 0; i < xAbs.length; i++ ) {
+                    ctx.beginPath();
+                    ctx.arc( _x( xAbs[i] ), _y( yAbs[i] ), 5, 0, 2 * Math.PI, true );
+                    if ( flags[i] & 0x1 ) {
+                        ctx.fill();
+                    } else {
+                        ctx.stroke();
+                    }
+                    ctx.fillText( i,_x( xAbs[i] ) + 5, _y( yAbs[i] ) + 5 );
+                }
+            }
         } );
             /*
         require( [ './tests/fonts/fonts.js' ], function() {

@@ -2,10 +2,17 @@
 
 importScripts( "../../lib/fonts/fonts.js" );
 
+var ctx = 0;
+
+onmessage = function( e ) {
+    ctx = e.data;
+    console.log( 'sefllsll' );
+}
+
 // cmap 2 4 2
 var f = new Fonts( "../../fonts/BahiaScriptSSK.ttf", { platform : "Win32", encoding : "UTF-8" }, function( data ) {
-    f.char( 'A' );
-    f.char( 254 );
+    var char_glyf = f.char( 'O' );
+    postMessage( char_glyf );
 // cmap 4
 // var f = new Fonts( "../../fonts/我字酷默陌写意水墨体.ttf", function( data ) {
 // cmap 4 6 4
