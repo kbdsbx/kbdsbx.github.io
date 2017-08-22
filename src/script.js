@@ -351,6 +351,130 @@ require( [ "jquery", "consoles" ], function( _jquery, _consoles ) {
         require( [ './lib/fonts/fonts.js' ], function() {
             c3.log( `library of fonts.js loaded.` );
             var worker = new Worker( "./tests/fonts/fonts.js" );
+            c3.log( `已装载字体：BahiaScriptSSK` );
+
+            var ctx = $( '#font-canvas' ).get(0).getContext( '2d' );
+
+            $( '.font-flush, [name="font-points"]' ).on( 'click', function() {
+                var c = $( '[name="font-text"]' ).val()[0];
+                if ( c ) {
+                    worker.postMessage( c );
+                }
+            } );
+
+            worker.onmessage = function( e ) {
+                ctx.clearRect( 0, 0, 750, 450 );
+                var contour_count = e.data.endPtsOfContours;
+                var flags = e.data.flags;
+                var xAbs = e.data.xAbsolutes;
+                var yAbs = e.data.yAbsolutes;
+
+                let _x = function( ori ) {
+                    return ( ori + ( e.data.xMax - e.data.xMin ) * -.5 ) * .3 + 375;
+                }
+                let _y = function( ori ) {
+                    return -( ( ori + ( e.data.yMax - e.data.yMin ) * -.5 ) * .3 ) + 155;
+                }
+
+                ctx.beginPath();
+
+                var contours = [];
+
+                for ( let c = 0; c < contour_count.length; c++ ) {
+                    contours.push( [] );
+                    for ( let i = ( c ? contour_count[c - 1] + 1 : 0 ); i <= contour_count[c]; i++ ) {
+                        contours[c].push( {
+                            flag : flags[i],
+                            xAbs : xAbs[i],
+                            yAbs : yAbs[i],
+                        } );
+                    }
+                    contours[c].push( {
+                        flag : flags[c ? contour_count[c - 1] + 1 : 0],
+                        xAbs : xAbs[c ? contour_count[c - 1] + 1 : 0],
+                        yAbs : yAbs[c ? contour_count[c - 1] + 1 : 0],
+                    } );
+                }
+
+                /*
+                var draw_from_point = function( idx ) {
+                    if ( flags[idx] & 0x1 ) {
+                        ctx.lineTo( _x( xAbs[idx] ), _y ( yAbs[idx] ) );
+                    } else {
+                        if ( flags[idx + 1] & 0x1 ) {
+                            ctx.bezierCurveTo( _x( xAbs[idx] ), _y( yAbs[idx] ), _x( xAbs[idx] ), _y( yAbs[idx] ), _x( xAbs[idx + 1] ), _y( yAbs[idx + 1] ) );
+                            i++;
+                        } else {
+                            ctx.bezierCurveTo( _x( xAbs[idx] ), _y( yAbs[idx] ), _x( xAbs[idx] ), _y( yAbs[idx] ), _x( xAbs[idx] + ( xAbs[idx + 1] - xAbs[idx] ) / 2.0 ), _y( yAbs[idx]  + ( yAbs[idx + 1] - yAbs[idx] ) / 2.0 ) );
+                        }
+                    }
+                }
+                */
+
+                var draw_form_point = function( contours, idx ) {
+                    if ( contours[idx].flag & 0x1 ) {
+                        ctx.lineTo( _x( contours[idx].xAbs ), _y( contours[idx].yAbs ) );
+                    } else {
+                        if ( contours[idx + 1].flag & 0x1 ) {
+                            // ctx.bezierCurveTo( _x( contours[idx].xAbs ), _y( contours[idx].yAbs ), _x( contours[idx].xAbs ), _y( contours[idx].yAbs ), _x( contours[idx + 1].xAbs ), _y( contours[idx + 1].yAbs ) );
+                            ctx.quadraticCurveTo( _x( contours[idx].xAbs ), _y( contours[idx].yAbs ), _x( contours[idx + 1].xAbs ), _y( contours[idx + 1].yAbs ) );
+                            return idx + 1;
+                        } else {
+                            // ctx.bezierCurveTo( _x( contours[idx].xAbs ), _y( contours[idx].yAbs ), _x( contours[idx].xAbs ), _y( contours[idx].yAbs ), _x( contours[idx].xAbs + ( contours[idx + 1].xAbs - contours[idx].xAbs ) / 2.0 ), _y( contours[idx].yAbs + ( contours[idx + 1].yAbs - contours[idx].yAbs ) / 2.0 ) );
+                            ctx.quadraticCurveTo( _x( contours[idx].xAbs ), _y( contours[idx].yAbs ), _x( contours[idx].xAbs + ( contours[idx + 1].xAbs - contours[idx].xAbs ) / 2.0 ), _y( contours[idx].yAbs + ( contours[idx + 1].yAbs - contours[idx].yAbs ) / 2.0 ) );
+                        }
+                    }
+                    return idx;
+                }
+
+                for ( let c = 0; c < contours.length; c++ ) {
+                    ctx.moveTo( _x( contours[c][0].xAbs ), _y ( contours[c][0].yAbs ) );
+                    for ( let i = 1; i < contours[c].length; i++ ) {
+                        i = draw_form_point( contours[c], i );
+                    }
+                    ctx.stroke();
+                }
+
+                /*
+                let i = 1;
+                for ( let count = 0; count < contours.length; count++ ) {
+                    ctx.moveTo( _x( xAbs[ count ? contours[ count - 1] : 0 ] ), _y ( yAbs[ count ? contours[count - 1] : 0 ] ) );
+                    for ( ; i < contours[count]; i++ ) {
+                        draw_from_point( i );
+                    }
+
+                    draw_from_point( count ? contours[count - 1] : 0 );
+                    ctx.stroke();
+                }
+
+                for ( let i = 1; i < xAbs.length; i++ ) {
+                    if ( flags[i] & 0x1 ) {
+                        ctx.lineTo( _x( xAbs[i] ), _y ( yAbs[i] ) );
+                    } else {
+                        if ( flags[i + 1] & 0x1 ) {
+                            ctx.bezierCurveTo( _x( xAbs[i] ), _y( yAbs[i] ), _x( xAbs[i] ), _y( yAbs[i] ), _x( xAbs[i + 1] ), _y( yAbs[i + 1] ) );
+                            i++;
+                        } else {
+                            ctx.bezierCurveTo( _x( xAbs[i] ), _y( yAbs[i] ), _x( xAbs[i] ), _y( yAbs[i] ), _x( xAbs[i] + ( xAbs[i + 1] - xAbs[i] ) / 2.0 ), _y( yAbs[i]  + ( yAbs[i + 1] - yAbs[i] ) / 2.0 ) );
+                        }
+                    }
+                }
+                ctx.stroke();
+                */
+
+                if ( $( '[name="font-points"]' ).is( ":checked" ) ) {
+                    for ( let i = 0; i < xAbs.length; i++ ) {
+                        ctx.beginPath();
+                        ctx.arc( _x( xAbs[i] ), _y( yAbs[i] ), 5, 0, 2 * Math.PI, true );
+                        if ( flags[i] & 0x1 ) {
+                            ctx.fill();
+                        } else {
+                            ctx.stroke();
+                        }
+                        ctx.fillText( i,_x( xAbs[i] ) + 5, _y( yAbs[i] ) + 5 );
+                    }
+                }
+            }
         } );
             /*
         require( [ './tests/fonts/fonts.js' ], function() {
@@ -431,6 +555,221 @@ require( [ "jquery", "consoles" ], function( _jquery, _consoles ) {
                 }
                 ani.run();
             } );
+
+            $( '.ease-transition' ).on( 'click', function() {
+                var _coos = [], _curr = 0;
+                var _temp = [], _temp_step = [], _temp_curr = 0, _temp_frames = 180;
+                var _stop = 0, _stop_frames = 180;
+
+                // y = x
+                _coos.push( [] );
+                for ( var i = -50; i < 50; i++ ) {
+                    _coos[_coos.length - 1].push( { x : i * .125, y : i * .125 } );
+                }
+                // y = sin(x)
+                _coos.push( [] );
+                for ( var i = -50; i < 50; i++ ) {
+                    _coos[_coos.length - 1].push( { x : i * .125, y : Math.sin( i * .125 ) } );
+                }
+                // y = cos(x)
+                _coos.push( [] );
+                for ( var i = -50; i < 50; i++ ) {
+                    _coos[_coos.length - 1].push( { x : i * .125, y : Math.cos( i * .125 ) } )
+                }
+                // y = tan(x)
+                _coos.push( [] );
+                for ( var i = -50; i < 50; i++ ) {
+                    _coos[_coos.length - 1].push( { x : i * .125, y : Math.tan( i * .125 ) } )
+                }
+                // y = e^(x)
+                _coos.push( [] );
+                for ( var i = -50; i < 50; i++ ) {
+                    _coos[_coos.length - 1].push( { x : i * .125, y : Math.exp( i * .125 ) } )
+                }
+                // y = x ^ 2
+                _coos.push( [] );
+                for ( var i = -50; i < 50; i++ ) {
+                    _coos[_coos.length - 1].push( { x : i * .125, y : Math.pow( i * .125, 2 ) } )
+                }
+                // y = x ^ 3
+                _coos.push( [] );
+                for ( var i = -50; i < 50; i++ ) {
+                    _coos[_coos.length - 1].push( { x : i * .125, y : Math.pow( i * .125, 3 ) } )
+                }
+                // y = x ^ -1
+                _coos.push( [] );
+                for ( var i = -50; i < 50; i++ ) {
+                    _coos[_coos.length - 1].push( { x : i * .125, y : Math.pow( i * .125, -1 ) } )
+                }
+
+                var _labels = [ `y = x`, `y = sin( x )`, `y = cos( x )`, `y = tan( x )`, `y = e ^ x`, `y = x ^ 2`, `y = x ^ 3`, `y = x ^ -1` ];
+
+                ani.stop();
+                ani.loop = function( args ) {
+                    var _c = args.context;
+                    _c.clearRect( 0, 0, 750, 450 );
+                    _c.fillStyle = "black";
+                    _c.fillText( `FPS: ${ani.fps}`, 10, 10 );
+                    _c.fillText( _labels[_curr] , 10, 30 );
+
+                    var _u = function() {
+                        return _curr;
+                    }
+                    var _n = function() {
+                        return ( _curr + 1 ) == _coos.length ? 0 : _curr + 1;
+                    }
+                    var _p = function() {
+                        return ( _curr - 1 ) == 0 ? _coos.length - 1 : _curr - 1;
+                    }
+
+                    if ( ! _stop ) {
+                        if ( ! _temp_curr ) {
+                            var _nv = _n();
+                            var _cv = _u();
+                            _temp = [];
+                            _temp_step = [];
+                            for ( var i = 0; i < 100; i++ ) {
+                                _temp.push( { x : _coos[_cv][i].x, y : _coos[_cv][i].y } );
+                            }
+                            for ( var i = 0; i < 100; i++ ) {
+                                _temp_step.push( { x : ( _coos[_nv][i].x - _coos[_cv][i].x ) * 1.0 / _temp_frames, y : ( _coos[_nv][i].y - _coos[_cv][i].y ) * 1.0 / _temp_frames } );
+                            }
+                            _temp_curr++;
+                        } else {
+                            if ( _temp_curr > _temp_frames ) {
+                                _temp_curr = 0;
+                                _curr = _n();
+                                _stop = _stop_frames;
+                            } else {
+                                for ( var i = 0; i < 100; i++ ) {
+                                    _temp[i].x += _temp_step[i].x;
+                                    _temp[i].y += _temp_step[i].y;
+                                }
+                                _temp_curr++;
+                            }
+                        }
+                    } else {
+                        _stop--;
+                    }
+
+                    _c.fillStyle = "#0093ff";
+                    for ( var i = 0; i < 100; i++ ) {
+                        _c.beginPath();
+                        _c.arc( _temp[i].x * 8 * 7.5 + 375, _temp[i].y * 8 * 7.5 * -1 + 225, 5, 0, 2 * Math.PI, true );
+                        _c.fill();
+                    }
+                }
+
+                ani.run();
+            } );
+
+            $( '.clock' ).on( 'click', function() {
+                var _stack = [];
+
+                ani.off( 'run' ).on( 'run', function() {
+                    _stack = [];
+                } )
+
+                ani.stop();
+                ani.loop = function( args ) {
+                    var _c = args.context;
+                    _c.clearRect( 0, 0, 750, 450 );
+                    _c.fillStyle = "black";
+                    _c.font = "12px";
+                    _c.fillText( `FPS: ${ani.fps}`, 10, 10 );
+
+                    _c.strokeStyle = "rgb( 227, 227, 227 )";
+                    _c.beginPath();
+                    _c.arc( 375, 225, 200, 0, 2 * Math.PI, true );
+                    _c.stroke();
+                    /*
+                    _c.beginPath();
+                    _c.arc( 375, 225, 206, 0, 2 * Math.PI, true );
+                    _c.stroke();
+                    _c.beginPath();
+                    _c.arc( 375, 225, 194, 0, 2 * Math.PI, true );
+                    _c.stroke();
+                    */
+
+                    _c.beginPath();
+                    _c.arc( 375, 225, 162, 0, 2 * Math.PI, true );
+                    _c.stroke();
+
+                    /*
+                    _c.beginPath();
+                    _c.arc( 375, 225, 168, 0, 2 * Math.PI, true );
+                    _c.stroke();
+                    _c.beginPath();
+                    _c.arc( 375, 225, 156, 0, 2 * Math.PI, true );
+                    _c.stroke();
+                    */
+
+                    _c.beginPath();
+                    _c.arc( 375, 225, 124, 0, 2 * Math.PI, true );
+                    _c.stroke();
+                    /*
+                    _c.beginPath();
+                    _c.arc( 375, 225, 130, 0, 2 * Math.PI, true );
+                    _c.stroke();
+                    _c.beginPath();
+                    _c.arc( 375, 225, 118, 0, 2 * Math.PI, true );
+                    _c.stroke();
+                    */
+
+                    var _r1 = 200, _r2 = 162, _r3 = 124;
+
+                    var _n = new Date();
+                    var _h = _n.getHours(), _m = _n.getMinutes(), _s = _n.getSeconds(), _ms = _n.valueOf() % 1000;
+                    var _hour = _h % 12 + _m * .0166666667 + _s * .0002777778;
+                    var _minute = _m + _s * .0166666667 + _ms * .0000166667;
+                    var _second = _s + _ms * .001;
+
+                    var _hour_arc = _hour / 12.0 * 2 * Math.PI;
+                    var _hour_x = _r1 * Math.sin( _hour_arc );
+                    var _hour_y = _r1 * Math.cos( _hour_arc );
+
+                    var _minute_arc = _minute / 60.0 * 2 * Math.PI;
+                    var _minute_x = _r2 * Math.sin( _minute_arc );
+                    var _minute_y = _r2 * Math.cos( _minute_arc );
+
+                    var _second_arc = _second / 60.0 * 2 * Math.PI;
+                    var _second_x = _r3 * Math.sin( _second_arc );
+                    var _second_y = _r3 * Math.cos( _second_arc );
+
+                    if ( _stack.length > 300 ) {
+                        _stack.pop();
+                    }
+                    _stack.unshift( {
+                        second_x : _second_x,
+                        second_y : _second_y,
+                    } );
+
+                    for ( var i = 0; i < _stack.length; i++ ) {
+                        // _c.arc( _second_x + 375, _second_y + 225, 5, 0, 2 * Math.PI, true );
+                        _c.fillStyle = `rgb( ${Math.floor(i * .85)}, ${174 + Math.floor(i * .36)}, 255 )`;
+                        _c.beginPath();
+                        _c.arc( _stack[i].second_x + 375, -_stack[i].second_y + 225, ( 5 - Math.min( 4.99, i * 0.016667 ) ), 0, 2 * Math.PI, true );
+                        _c.fill();
+                    }
+                    
+                    _c.fillStyle = "rgb( 0, 73, 128 )";
+                    _c.beginPath();
+                    _c.arc( _minute_x + 375, -_minute_y + 225, 10, 0, 2 * Math.PI, true );
+                    _c.fill();
+                    _c.fillStyle = "#fff";
+                    _c.font = "8px";
+                    _c.fillText( Math.floor( _minute ), _minute_x + 375 - 4 - ( _minute >= 10 ? 4 : 0 ), -_minute_y + 225 + 4 );
+
+                    _c.fillStyle = "rgb( 0, 36, 64 )";
+                    _c.beginPath();
+                    _c.arc( _hour_x + 375, -_hour_y + 225, 12, 0, 2 * Math.PI, true );
+                    _c.fill();
+                    _c.fillStyle = "#fff";
+                    _c.font = "8px";
+                    _c.fillText( Math.floor( _hour ), _hour_x + 375 - 4 - ( _hour >= 10 ? 4 : 0 ), -_hour_y + 225 + 5 );
+                }
+                ani.run();
+            } )
         } )
     } )
 } );
