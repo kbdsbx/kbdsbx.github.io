@@ -351,23 +351,102 @@ require( [ "jquery", "consoles" ], function( _jquery, _consoles ) {
         require( [ './lib/fonts/fonts.js' ], function() {
             c3.log( `library of fonts.js loaded.` );
             var worker = new Worker( "./tests/fonts/fonts.js" );
+            c3.log( `已装载字体：BahiaScriptSSK` );
 
             var ctx = $( '#font-canvas' ).get(0).getContext( '2d' );
 
-            let _x = function( ori ) {
-                return ori * .3 + 375;
-            }
-            let _y = function( ori ) {
-                return -( ori * .3 ) + 255;
-            }
+            $( '.font-flush, [name="font-points"]' ).on( 'click', function() {
+                var c = $( '[name="font-text"]' ).val()[0];
+                if ( c ) {
+                    worker.postMessage( c );
+                }
+            } );
+
             worker.onmessage = function( e ) {
-                console.log( e.data );
+                ctx.clearRect( 0, 0, 750, 450 );
+                var contour_count = e.data.endPtsOfContours;
                 var flags = e.data.flags;
                 var xAbs = e.data.xAbsolutes;
                 var yAbs = e.data.yAbsolutes;
 
+                let _x = function( ori ) {
+                    return ( ori + ( e.data.xMax - e.data.xMin ) * -.5 ) * .3 + 375;
+                }
+                let _y = function( ori ) {
+                    return -( ( ori + ( e.data.yMax - e.data.yMin ) * -.5 ) * .3 ) + 155;
+                }
+
                 ctx.beginPath();
-                ctx.moveTo( _x( xAbs[0] ), _y ( yAbs[0] ) );
+
+                var contours = [];
+
+                for ( let c = 0; c < contour_count.length; c++ ) {
+                    contours.push( [] );
+                    for ( let i = ( c ? contour_count[c - 1] + 1 : 0 ); i <= contour_count[c]; i++ ) {
+                        contours[c].push( {
+                            flag : flags[i],
+                            xAbs : xAbs[i],
+                            yAbs : yAbs[i],
+                        } );
+                    }
+                    contours[c].push( {
+                        flag : flags[c ? contour_count[c - 1] + 1 : 0],
+                        xAbs : xAbs[c ? contour_count[c - 1] + 1 : 0],
+                        yAbs : yAbs[c ? contour_count[c - 1] + 1 : 0],
+                    } );
+                }
+
+                /*
+                var draw_from_point = function( idx ) {
+                    if ( flags[idx] & 0x1 ) {
+                        ctx.lineTo( _x( xAbs[idx] ), _y ( yAbs[idx] ) );
+                    } else {
+                        if ( flags[idx + 1] & 0x1 ) {
+                            ctx.bezierCurveTo( _x( xAbs[idx] ), _y( yAbs[idx] ), _x( xAbs[idx] ), _y( yAbs[idx] ), _x( xAbs[idx + 1] ), _y( yAbs[idx + 1] ) );
+                            i++;
+                        } else {
+                            ctx.bezierCurveTo( _x( xAbs[idx] ), _y( yAbs[idx] ), _x( xAbs[idx] ), _y( yAbs[idx] ), _x( xAbs[idx] + ( xAbs[idx + 1] - xAbs[idx] ) / 2.0 ), _y( yAbs[idx]  + ( yAbs[idx + 1] - yAbs[idx] ) / 2.0 ) );
+                        }
+                    }
+                }
+                */
+
+                var draw_form_point = function( contours, idx ) {
+                    if ( contours[idx].flag & 0x1 ) {
+                        ctx.lineTo( _x( contours[idx].xAbs ), _y( contours[idx].yAbs ) );
+                    } else {
+                        if ( contours[idx + 1].flag & 0x1 ) {
+                            // ctx.bezierCurveTo( _x( contours[idx].xAbs ), _y( contours[idx].yAbs ), _x( contours[idx].xAbs ), _y( contours[idx].yAbs ), _x( contours[idx + 1].xAbs ), _y( contours[idx + 1].yAbs ) );
+                            ctx.quadraticCurveTo( _x( contours[idx].xAbs ), _y( contours[idx].yAbs ), _x( contours[idx + 1].xAbs ), _y( contours[idx + 1].yAbs ) );
+                            return idx + 1;
+                        } else {
+                            // ctx.bezierCurveTo( _x( contours[idx].xAbs ), _y( contours[idx].yAbs ), _x( contours[idx].xAbs ), _y( contours[idx].yAbs ), _x( contours[idx].xAbs + ( contours[idx + 1].xAbs - contours[idx].xAbs ) / 2.0 ), _y( contours[idx].yAbs + ( contours[idx + 1].yAbs - contours[idx].yAbs ) / 2.0 ) );
+                            ctx.quadraticCurveTo( _x( contours[idx].xAbs ), _y( contours[idx].yAbs ), _x( contours[idx].xAbs + ( contours[idx + 1].xAbs - contours[idx].xAbs ) / 2.0 ), _y( contours[idx].yAbs + ( contours[idx + 1].yAbs - contours[idx].yAbs ) / 2.0 ) );
+                        }
+                    }
+                    return idx;
+                }
+
+                for ( let c = 0; c < contours.length; c++ ) {
+                    ctx.moveTo( _x( contours[c][0].xAbs ), _y ( contours[c][0].yAbs ) );
+                    for ( let i = 1; i < contours[c].length; i++ ) {
+                        i = draw_form_point( contours[c], i );
+                    }
+                    ctx.stroke();
+                }
+
+                /*
+                let i = 1;
+                for ( let count = 0; count < contours.length; count++ ) {
+                    ctx.moveTo( _x( xAbs[ count ? contours[ count - 1] : 0 ] ), _y ( yAbs[ count ? contours[count - 1] : 0 ] ) );
+                    for ( ; i < contours[count]; i++ ) {
+                        draw_from_point( i );
+                    }
+
+                    draw_from_point( count ? contours[count - 1] : 0 );
+                    ctx.stroke();
+                }
+
                 for ( let i = 1; i < xAbs.length; i++ ) {
                     if ( flags[i] & 0x1 ) {
                         ctx.lineTo( _x( xAbs[i] ), _y ( yAbs[i] ) );
@@ -381,16 +460,19 @@ require( [ "jquery", "consoles" ], function( _jquery, _consoles ) {
                     }
                 }
                 ctx.stroke();
+                */
 
-                for ( let i = 0; i < xAbs.length; i++ ) {
-                    ctx.beginPath();
-                    ctx.arc( _x( xAbs[i] ), _y( yAbs[i] ), 5, 0, 2 * Math.PI, true );
-                    if ( flags[i] & 0x1 ) {
-                        ctx.fill();
-                    } else {
-                        ctx.stroke();
+                if ( $( '[name="font-points"]' ).is( ":checked" ) ) {
+                    for ( let i = 0; i < xAbs.length; i++ ) {
+                        ctx.beginPath();
+                        ctx.arc( _x( xAbs[i] ), _y( yAbs[i] ), 5, 0, 2 * Math.PI, true );
+                        if ( flags[i] & 0x1 ) {
+                            ctx.fill();
+                        } else {
+                            ctx.stroke();
+                        }
+                        ctx.fillText( i,_x( xAbs[i] ) + 5, _y( yAbs[i] ) + 5 );
                     }
-                    ctx.fillText( i,_x( xAbs[i] ) + 5, _y( yAbs[i] ) + 5 );
                 }
             }
         } );

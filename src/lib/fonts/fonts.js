@@ -670,7 +670,7 @@ class Fonts {
             code = code.charCodeAt();
         }
         var glyphID = this.cmap.glyphID( code );
-        var glyph = this.glyf.glyph( glyphID );
+        var glyph = this.glyf.glyph( glyphID || 0 );
 
         return glyph;
     }
