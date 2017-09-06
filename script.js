@@ -491,7 +491,7 @@ require( [ "jquery", "consoles" ], function( _jquery, _consoles ) {
     $( '#test-4' ).on( 'load', function() {
         c4.log( `test 04 [animation] init.` );
 
-        require( [ './lib/animation/animation.js' ], function() {
+        require( [ './lib/animation/animation.js', './lib/animation/animation-context.js' ], function() {
             c4.log( `library of animation.js loaded.` );
             var ani = new animation( 'animation-canvas' );
             ani.fps = 60;
@@ -504,6 +504,46 @@ require( [ "jquery", "consoles" ], function( _jquery, _consoles ) {
             $( '.animation-run' ).on( 'click', function() {
                 ani.run();
             } );
+            
+            $( '.stroke-test' ).on( 'click', function() {
+                var _c2 = new animation_context( ani );
+                var _c3 = new animation_context( ani );
+
+                _c2.beginPath();
+                _c2.moveTo( 50, 150 );
+                _c2.lineTo( 250, 150 );
+                _c2.lineTo( 290, 170 );
+                _c2.quadraticCurveTo( 300, 100, 430, 180 );
+
+                _c3.beginPath();
+                _c3.moveTo( 50, 250 );
+                _c3.lineTo( 250, 250 );
+                _c3.lineTo( 290, 270 );
+                _c3.quadraticCurveTo( 300, 200, 430, 280 );
+
+                ani.stop();
+                ani.loop = function( ctx ) {
+                    var _c = ctx.context;
+
+                    _c.clearRect( 0, 0, 750, 450 );
+                    _c.fillStyle = "black";
+                    _c.fillText( `FPS: ${ani.fps}`, 10, 10 );
+                    _c.strokeStyle = "black";
+
+                    _c.beginPath();
+                    _c.moveTo( 50, 50 );
+                    _c.lineTo( 250, 50 );
+                    _c.lineTo( 290, 70 );
+                    _c.quadraticCurveTo( 300, 0, 430, 80 );
+                    _c.stroke();
+
+                    _c2.stroke( 1000 );
+
+                    _c3.stroke( 2000 );
+                }
+                ani.run();
+            } );
+
             $( '.jump-ball' ).on( 'click', function() {
                 var x = 0, xp = 1, xt = 6;
                 var y = 0, yp = 1, yt = 6;

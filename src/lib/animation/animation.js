@@ -25,6 +25,7 @@ class animation {
                 var _request_func = function( timestamp ) {
                     _this._pass += ( timestamp - _this._prev_timestamp );
                     if ( ( _this._pass - _this._frame ) > -1 ) {
+                        console.log( _this._pass );
                         _this._loop.call( _this, {
                             timestamp : timestamp,
                             pass : _this._pass,
@@ -108,84 +109,6 @@ class animation {
 
     get fps() {
         return this._fps;
-    }
-
-    beginPath () {
-        this.__x = 0;
-        this.__y = 0;
-        this.__path = [];
-    }
-
-    moveTo( x, y ) {
-        this.__path.push( {
-            to_x : x,
-            to_y : y,
-            length : 0,
-        } );
-
-        this.__x = x;
-        this.__y = y;
-    }
-
-    lineTo( x, y ) {
-        this.__path.push( {
-            to_x : x,
-            to_y : y,
-            length : Math.sqrt( Math.pow( x - this.__x, 2 ) + Math.pow( y - this.__y, 2 ) ),
-        } );
-
-        this.__x = x;
-        this.__y = y;
-    }
-
-    quadraticCurveTo( cpx, cpy, x, y ) {
-        let max_len = Math.sqrt( Math.pow( cpx - this.__x, 2 ) + Math.pow( cpy - this.__y, 2 ) ) + Math.sqrt( Math.pow( x - cpx, 2 ) + Math.pow( y - cpy, 2 ) );
-        let line_len = 3;   // 小于[line_len]个像素的曲线被绘制成直线
-        let len = Math.floor( 1.0 * max_len / line_len );
-
-        for ( let i = 0; i < len; i++ ) {
-            let t = 1.0 / len * i;
-            let a = ( 1 - t ) * ( 1 - t );
-            let b = 2.0 * t * ( 1 - t );
-            let c = t * t;
-
-            let to_x = a * this.__x + b * cpx + c * x;
-            let to_y = a * this.__y + b * cpy + c * y;
-
-            this.__path.push( {
-                to_x : to_x,
-                to_y : to_y,
-                length : Math.sqrt( Math.pow( to_x - this.__x, 2 ) + Math.pow( to_y - this.__y, 2 ) ),
-            } );
-
-            this.__x = to_x;
-            this.__y = to_y;
-        }
-
-        this.__path.push( {
-            to_x : x,
-            to_y : y,
-            length : Math.sqrt( Math.pow( x - this.__x, 2 ) + Math.pow( y - this.__y, 2 ) ),
-        } );
-
-        this.__x = x;
-        this.__y = y;
-    }
-
-    stroke( ms ) {
-        var ctx = this.$context;
-
-        ctx.beginPath();
-        ctx.moveTo( this.__path[0].to_x, this.__path[0].to_y );
-        for ( let i = 1; i < this.__path.length; i++ ) {
-            if ( this.__path[i].length ) {
-                ctx.lineTo( this.__path[i].to_x, this.__path[i].to_y );
-            } else {
-                ctx.moveTo( this.__path[i].to_x, this.__path[i].to_y );
-            }
-        }
-        ctx.lineTo( this.__path[0].to_x, this.__path[0].to_y );
-        ctx.stroke();
     }
 
     run() {
