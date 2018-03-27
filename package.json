@@ -7,14 +7,16 @@
     "lib": "lib"
   },
   "dependencies": {
-    "gulp": "^3.9.1",
     "gulp-clean": "^0.3.2",
     "gulp-csso": "^3.0.0",
     "gulp-html-replace": "^1.6.2",
     "gulp-less": "^3.3.0"
   },
   "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-notify": "^3.2.0",
     "jQuery": "^1.7.4",
+    "less-brush": "^0.1.7",
     "requirejs": "^2.3.3"
   },
   "scripts": {

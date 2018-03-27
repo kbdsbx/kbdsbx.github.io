@@ -14,7 +14,8 @@ require.config({
             exports : 'consoles',
             deps : [ 'jquery' ],
         }
-    }
+    },
+    waitSeconds: 0
 })
 
 var $, consoles, c2, c3, c4;
