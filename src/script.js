@@ -811,6 +811,87 @@ require( [ "jquery", "consoles" ], function( _jquery, _consoles ) {
                 }
                 ani.run();
             } )
+
+            var worker = new Worker( "./tests/fonts/fonts.js" );
+            c4.log( '已装载字体：BahiaScriptSSK' );
+            $( '.font-flush-animation' ).on( 'click', function() {
+                var code = $( '[name="font-text-animation"]' ).val()[0];
+                if ( code ) {
+                    worker.postMessage( code );
+                }
+                var ctx = new animation_context( ani );
+                worker.onmessage = function( e ) {
+                    
+                    var contour_count = e.data.endPtsOfContours;
+                    var flags = e.data.flags;
+                    var xAbs = e.data.xAbsolutes;
+                    var yAbs = e.data.yAbsolutes;
+
+                    let _x = function( ori ) {
+                        return ( ori + ( e.data.xMax - e.data.xMin ) * -.5 ) * .3 + 375;
+                    }
+                    let _y = function( ori ) {
+                        return -( ( ori + ( e.data.yMax - e.data.yMin ) * -.5 ) * .3 ) + 155;
+                    }
+
+                    ctx.beginPath();
+
+                    var contours = [];
+
+                    for ( let c = 0; c < contour_count.length; c++ ) {
+                        contours.push( [] );
+                        for ( let i = ( c ? contour_count[c - 1] + 1 : 0 ); i <= contour_count[c]; i++ ) {
+                            contours[c].push( {
+                                flag : flags[i],
+                                xAbs : xAbs[i],
+                                yAbs : yAbs[i],
+                            } );
+                        }
+                        contours[c].push( {
+                            flag : flags[c ? contour_count[c - 1] + 1 : 0],
+                            xAbs : xAbs[c ? contour_count[c - 1] + 1 : 0],
+                            yAbs : yAbs[c ? contour_count[c - 1] + 1 : 0],
+                        } );
+                    }
+
+                            
+                    var draw_form_point = function( contours, idx ) {
+                        if ( contours[idx].flag & 0x1 ) {
+                            ctx.lineTo( _x( contours[idx].xAbs ), _y( contours[idx].yAbs ) );
+                        } else {
+                            if ( contours[idx + 1].flag & 0x1 ) {
+                                // ctx.bezierCurveTo( _x( contours[idx].xAbs ), _y( contours[idx].yAbs ), _x( contours[idx].xAbs ), _y( contours[idx].yAbs ), _x( contours[idx + 1].xAbs ), _y( contours[idx + 1].yAbs ) );
+                                ctx.quadraticCurveTo( _x( contours[idx].xAbs ), _y( contours[idx].yAbs ), _x( contours[idx + 1].xAbs ), _y( contours[idx + 1].yAbs ) );
+                                return idx + 1;
+                            } else {
+                                // ctx.bezierCurveTo( _x( contours[idx].xAbs ), _y( contours[idx].yAbs ), _x( contours[idx].xAbs ), _y( contours[idx].yAbs ), _x( contours[idx].xAbs + ( contours[idx + 1].xAbs - contours[idx].xAbs ) / 2.0 ), _y( contours[idx].yAbs + ( contours[idx + 1].yAbs - contours[idx].yAbs ) / 2.0 ) );
+                                ctx.quadraticCurveTo( _x( contours[idx].xAbs ), _y( contours[idx].yAbs ), _x( contours[idx].xAbs + ( contours[idx + 1].xAbs - contours[idx].xAbs ) / 2.0 ), _y( contours[idx].yAbs + ( contours[idx + 1].yAbs - contours[idx].yAbs ) / 2.0 ) );
+                            }
+                        }
+                        return idx;
+                    }
+
+                    for ( let c = 0; c < contours.length; c++ ) {
+                        ctx.moveTo( _x( contours[c][0].xAbs ), _y ( contours[c][0].yAbs ) );
+                        for ( let i = 1; i < contours[c].length; i++ ) {
+                            i = draw_form_point( contours[c], i );
+                        }
+                    }
+
+                    ani.stop();
+                    ani.loop = function ( args ) {
+                        var _c = args.context;
+                        _c.clearRect( 0, 0, 750, 450 );
+                        _c.fillStyle = "black";
+                        _c.font = "12px";
+                        _c.fillText( `FPS: ${ani.fps}`, 10, 10 );
+                        // var ctx = _c;
+
+                        ctx.stroke( 6000 );
+                    }
+                    ani.run();
+                }
+            } );
         } )
     } )
 } );
